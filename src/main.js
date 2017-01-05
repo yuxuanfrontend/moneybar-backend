@@ -22,6 +22,9 @@ Vue.use(VueRouter)
 Vue.use(VueSuperagent)
 // Vue.use(VueMdl)
 
+
+
+
 const router = new VueRouter({
   routes
 })

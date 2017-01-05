@@ -1,10 +1,29 @@
-<style lang="scss">
-
+<style lang="css">
+html,body{
+  height: 100%;
+}
+#app {
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  height: 100%;
+  position: relative;
+}
+*{
+  margin: 0;
+  padding: 0;
+}
 </style>
 
 <template>
   <div id="app">
-    <section class="hero is-primary">
+    <managementhead></managementhead>
+    <managementwrap></managementwrap>
+    <!-- <router-view></router-view> -->
+
+    <!-- <section class="hero is-primary">
       <div class="hero-body">
         <img src="./assets/logo.png" style="width:50px;">
         <span>上文引力</span>
@@ -31,19 +50,21 @@
 
     </div>
 
-    <notification></notification>
+    <notification></notification> -->
 
   </div>
 </template>
 
 <script>
 
-import notification from './components/notification'
-
+// import notification from './components/notification'
+import managementhead from './components/managementHead'
+import managementwrap from './components/managementWrap'
 export default {
   name: 'app',
   components: {
-    notification
+    managementhead,
+    managementwrap
   },
 }
 </script>
