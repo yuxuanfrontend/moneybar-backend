@@ -8,18 +8,16 @@ let VueSuperagent = {}
 
 VueSuperagent.install = function(Vue, options) {
 
-  Vue.prototype.$request = function(method, url) {
+  Vue.prototype.$request = superagent
+
+  Vue.prototype.$myRequest = function(method, url) {
     return superagent[method](config.domain + url)
       .timeout({
-        response: 5000,
+        response: 8000,
       }).
       on('error', (err) => {
-
         if (err.timeout) {
-          store.dispatch('fadeShow', {
-            status: 'info',
-            content: '请求超时'
-          })
+          Toast('请求超时')
         }
       })
   }
