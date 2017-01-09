@@ -8,6 +8,10 @@ let VueSuperagent = {}
 
 VueSuperagent.install = function(Vue, options) {
 
+  Vue.prototype.$getUrl = function(partial) {
+    return config.domain + partial
+  }
+
   Vue.prototype.$request = superagent
 
   Vue.prototype.$myRequest = function(method, url) {
