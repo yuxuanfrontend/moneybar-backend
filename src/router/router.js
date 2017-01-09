@@ -5,11 +5,11 @@ import user from '../pages/user/user'
 import managementcontent from "../components/managementContent"
 
 module.exports = [
-  {
-    path:'/',
-    name:'',
-    component:managementcontent
-  },
+  // {
+  //   path:'/',
+  //   name:'',
+  //   component:managementcontent
+  // },
 
   {
     path: '/dynamic',

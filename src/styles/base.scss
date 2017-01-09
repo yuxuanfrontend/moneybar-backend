@@ -16,6 +16,15 @@ body {
   margin: 20px 0;
 }
 
+.my-container {
+  background: #fff;
+  left: 230px;
+  top:70px;
+  position: relative;
+  width: calc(100% - 240px);
+  height: calc(100% - 80px);
+}
+
 // input {
 //   border: 1px solid #000;
 //   outline: 0;

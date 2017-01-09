@@ -26,8 +26,8 @@
     </div>
     <div class="searchbox">
       <input type="text" name="" value="" placeholder="文章标题" v-model="articleTitle">
-      <date-picker field="myDate" placeholder="开始时间" v-model="dateBegin" format="yyyy/mm/dd"></date-picker>
-      <date-picker field="myDate" placeholder="结束时间" v-model="dateEnd" format="yyyy/mm/dd"></date-picker>
+      <!-- <date-picker field="myDate" placeholder="开始时间" v-model="dateBegin" format="yyyy/mm/dd"></date-picker>
+      <date-picker field="myDate" placeholder="结束时间" v-model="dateEnd" format="yyyy/mm/dd"></date-picker> -->
       <button type="button" name="button" v-on:click="searchBtn">搜索</button>
       <button type="button" name="button" v-on:click="clearBtn">清空</button>
     </div>

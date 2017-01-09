@@ -3,7 +3,7 @@
     <div class="nav-box">
       <h2 class="navtitle">钱吧</h2>
       <ul>
-        <router-link to='/' tag='li' class="active">动态管理</router-link>
+        <router-link to='/dynamic' tag='li' class="active">动态管理</router-link>
         <router-link to='/' tag='li' class="active">小组管理</router-link>
         <router-link to='/' tag='li' class="active">用户管理</router-link>
         <router-link to='/' tag='li' class="active">话题管理</router-link>
