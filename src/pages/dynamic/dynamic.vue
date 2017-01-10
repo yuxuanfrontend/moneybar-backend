@@ -1,28 +1,5 @@
 <style lang="scss" scoped>
-.mb-type {
-  display: flex;
-  align-items: center;
-  padding: 20px 30px;
-}
 
-.control {
-  display: flex;
-  align-items: center;
-  margin-left: 20px;
-}
-
-.mb-filter {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  padding: 20px 30px;
-  margin-left: -10px;
-
-  &__input {
-    width: 100px;
-    margin: 0 10px;
-  }
-}
 </style>
 
 <template lang="html">

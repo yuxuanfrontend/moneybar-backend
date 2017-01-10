@@ -45,7 +45,10 @@ body {
   margin-left: -10px;
 
   &__input {
-    width: 100px;
+    width: 140px;
+    margin: 0 10px;
+  }
+  &__button{
     margin: 0 10px;
   }
 }

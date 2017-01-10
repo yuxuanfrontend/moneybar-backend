@@ -3,10 +3,9 @@
     <div class="nav-box">
       <h2 class="navtitle">钱吧</h2>
       <ul>
-        <router-link to='/dynamic' tag='li' class="active">动态管理</router-link>
-        <router-link to='/' tag='li' class="active">小组管理</router-link>
-        <router-link to='/' tag='li' class="active">用户管理</router-link>
-        <router-link to='/' tag='li' class="active">话题管理</router-link>
+        <li v-for="(management,index) in managements" v-on:click="activeIndex = index" v-bind:class="{'active':index === activeIndex}" >
+          <router-link :to='management.href'>{{management.managementTitle}}</router-link>
+        </li>
       </ul>
     </div>
   </div>
@@ -14,6 +13,20 @@
 
 <script>
 export default {
+  name:'managementMenu',
+  data(){
+    return{
+      activeIndex:0,
+      managements:[
+        {managementTitle:'动态管理',href:'/dynamic'},
+        {managementTitle:'小组管理',href:'/team'},
+        {managementTitle:'用户管理',href:'/user'},
+        {managementTitle:'话题管理',href:'/topic'},
+      ]
+    }
+  },
+  methods:{
+  }
 }
 </script>
 
@@ -26,13 +39,19 @@ export default {
   top:70px;
   font-family:"微软雅黑";
 }
+.nav-box ul{
+  background: #354356;
+}
 .nav-box ul li{
-  color: #dbdbdb;
   height: 44px;
   line-height: 44px;
-  font-size: 14px;
   cursor: pointer;
   text-decoration: none;
+}
+.nav-box ul li a{
+  color: #dbdbdb;
+  display: block;
+  font-size: 14px;
 }
 .navtitle{
   font-size: 16px;
@@ -43,6 +62,6 @@ export default {
   cursor: pointer;
 }
 .active{
-  background: #354356;
+  background: #44617b;
 }
 </style>
