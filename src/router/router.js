@@ -3,7 +3,9 @@ import dynamicDetail from '../pages/dynamic/dynamic-detail'
 import team from '../pages/team/team'
 import topic from '../pages/topic/topic'
 import user from '../pages/user/user'
-import managementcontent from "../components/managementContent"
+import managementcontent from '../components/managementContent'
+import teamlist from '../pages/team/teamList'
+import newaddteam from '../pages/team/newAddTeam'
 
 module.exports = [
   // {
@@ -24,6 +26,16 @@ module.exports = [
   {
     path: '/team',
     component: team
+  },
+
+  {
+    path:'/teamlist/:id',
+    component:teamlist
+  },
+
+  {
+    path:'/newaddteam',
+    component:newaddteam
   },
 
   {
