@@ -25,6 +25,7 @@ export default {
   position:absolute;
   top:70px;
   font-family:"微软雅黑";
+  text-align: center;
 }
 .nav-box ul li{
   color: #dbdbdb;

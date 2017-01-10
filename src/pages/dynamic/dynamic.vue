@@ -23,6 +23,17 @@
     margin: 0 10px;
   }
 }
+
+th, td {
+  vertical-align: middle;
+  text-align: center;
+}
+
+.title-td {
+  text-align:left;
+  width:400px;
+  overflow: hidden;
+}
 </style>
 
 <template lang="html">
@@ -55,9 +66,9 @@
     </div>
 
     <div>
-      <table class="table">
+      <table class="table is-striped">
         <thead>
-          <th>标题</th>
+          <th style="max-width:200px;">标题</th>
           <th>交易id</th>
           <th>用户昵称</th>
           <th>发布时间</th>
@@ -67,15 +78,77 @@
           <th>操作</th>
         </thead>
         <tbody>
-          <tr v-for=""></tr>
+          <tr v-for="dynamic in dynamicDatas">
+            <td class="title-td">{{dynamic.title}}</td>
+            <td>{{dynamic.dealId}}</td>
+            <td>{{dynamic.nickname}}</td>
+            <td>{{dynamic.publishTime}}</td>
+            <td>{{dynamic.team}}</td>
+            <td>{{dynamic.readAmount}}</td>
+            <td>{{dynamic.status}}</td>
+            <td>
+              <button class="button is-info">查看</button>
+              <button class="button is-info">删帖</button>
+              <button class="button is-info" v-show="false">恢复</button>
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
+
+    <pagination :total="20" @pagination-change="changePage"></pagination>
   </div>
 </template>
 
 <script>
+
+import pagination from '../../components/pagination'
+
 export default {
-  name: 'dynamic'
+  name: 'dynamic',
+
+  data() {
+    return {
+      dynamicDatas: [
+        {
+          title: '上文引立公0005号关于上文引立公0005号关于上文引立公0005号关于上文引立公0005号关于上文引立公0005号关于',
+          dealId: 124,
+          nickname: '村夫',
+          publishTime: '2016-11-11 15:20',
+          team: '有油壹分小组',
+          readAmount: 1000,
+          status: 0,
+        },
+        {
+          title: '上文引立公0005号关于',
+          dealId: 124,
+          nickname: '村夫',
+          publishTime: '2016-11-11 15:20',
+          team: '有油壹分小组',
+          readAmount: 1000,
+          status: 0,
+        },
+        {
+          title: '上文引立公0005号关于',
+          dealId: 124,
+          nickname: '村夫',
+          publishTime: '2016-11-11 15:20',
+          team: '有油壹分小组',
+          readAmount: 1000,
+          status: 0,
+        }
+      ]
+    }
+  },
+
+  methods: {
+    changePage(page) {
+      console.log(page);
+    }
+  },
+
+  components: {
+    pagination
+  }
 }
 </script>

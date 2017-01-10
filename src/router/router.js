@@ -1,4 +1,5 @@
 import dynamic from '../pages/dynamic/dynamic'
+import dynamicDetail from '../pages/dynamic/dynamic-detail'
 import team from '../pages/team/team'
 import topic from '../pages/topic/topic'
 import user from '../pages/user/user'
@@ -13,9 +14,13 @@ module.exports = [
 
   {
     path: '/dynamic',
-    component: dynamic
+    component: dynamic,
   },
 
+  {
+    path: '/dynamic-detail',
+    component: dynamicDetail
+  },
   {
     path: '/team',
     component: team
