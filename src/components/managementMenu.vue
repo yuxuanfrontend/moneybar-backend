@@ -3,7 +3,7 @@
     <div class="nav-box">
       <h2 class="navtitle">钱吧</h2>
       <ul>
-        <li v-for="(management,index) in managements" v-on:click="activeIndex = index" v-bind:class="{'active':index === activeIndex}" >
+        <li v-for="(management,index) in managements" v-on:click="clickTitle(index)" v-bind:class="{'active':index === count }" >
           <router-link :to='management.href'>{{management.managementTitle}}</router-link>
         </li>
       </ul>
@@ -16,7 +16,7 @@ export default {
   name:'managementMenu',
   data(){
     return{
-      activeIndex:0,
+      count:0,
       managements:[
         {managementTitle:'动态管理',href:'/dynamic'},
         {managementTitle:'小组管理',href:'/team'},
@@ -25,7 +25,24 @@ export default {
       ]
     }
   },
+  computed:{
+  },
+  mounted() {
+    // console.log(this.$route.path)
+    if (this.$route.path === '/dynamic') {
+      this.count = 0
+    }else if(this.$route.path === '/team'){
+      this.count = 1
+    }else if(this.$route.path === '/user'){
+      this.count = 2
+    }else if(this.$route.path === '/topic'){
+      this.count = 3
+    }
+  },
   methods:{
+    clickTitle(index){
+      this.count = index
+    }
   }
 }
 </script>

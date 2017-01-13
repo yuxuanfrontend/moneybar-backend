@@ -35,12 +35,12 @@ export default {
   data() {
     return {
       currentPage: 1,
-      totalPage: this.total,
+      // totalPage: this.total,
     }
   },
 
   props: {
-    total: {
+    totalPage: {
       type: Number,
       required: true
     }

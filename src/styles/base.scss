@@ -28,11 +28,28 @@ body {
   width: calc(100% - 240px);
   height: calc(100% - 80px);
 }
+.mb-title{
+  justify-content: space-between;
+}
 
+.mb-title,
 .mb-type {
   display: flex;
   align-items: center;
   padding: 20px 30px;
+}
+
+.title-td {
+  text-align:left;
+  overflow: hidden;
+}
+
+.w400{
+  width:400px;
+}
+
+.w400{
+  width:400px;
 }
 
 .control {
@@ -46,7 +63,7 @@ body {
   justify-content: flex-start;
   align-items: center;
   padding: 20px 30px;
-  margin-left: -10px;
+  // margin-left: -10px;
 
   &__input {
     width: 140px;

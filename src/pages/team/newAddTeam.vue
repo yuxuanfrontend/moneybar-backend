@@ -8,13 +8,13 @@
         <tbody>
           <tr>
             <td width="10%"><label>小组名：</label></td>
-            <td width="90%"><input class="input" type="text" placeholder="小组名称"></td>
+            <td width="90%"><input class="input" type="text" placeholder="小组名称" v-model="teamName"></td>
           </tr>
           <tr>
             <td><label>小组logo：</label></td>
             <td>
               <div class="file-input">
-                <input type="file" placeholder="小组名称">
+                <input type="file" placeholder="小组名称" >
               </div>
             </td>
           </tr>
@@ -23,9 +23,8 @@
             <td>
               <p class="control">
                 <span class="select">
-                  <select>
-                    <option>Select dropdown</option>
-                    <option>With options</option>
+                  <select v-model="selectedManagerId">
+                    <option v-for="manager in teamManagers" :value="manager.memberId">{{ manager.name }}</option>
                   </select>
                 </span>
                 <span class="select">
@@ -43,7 +42,7 @@
             <td class="text-top"><label >简介：</label></td>
             <td>
               <p class="control">
-                <textarea class="textarea" placeholder="Textarea"></textarea>
+                <textarea class="textarea" placeholder="Textarea" v-model="teamBrief"></textarea>
               </p>
             </td>
           </tr>
@@ -51,8 +50,8 @@
         <tfoot>
           <tr>
             <td colspan="2">
-              <button class="button is-info">确定</button>
-              <button class="button is-info">取消</button>
+              <a class="button is-info" @click="confirmBtn">确定</a>
+              <a class="button is-info">取消</a>
             </td>
           </tr>
         </tfoot>
@@ -62,7 +61,50 @@
 </template>
 
 <script>
+
 export default {
+  name:'newAddTeam',
+  data () {
+    return {
+      teamName:'',
+      teamBrief:'',
+      teamManager:'',
+      teamManagers:[],
+      selectedManagerId: ''
+    }
+  },
+  mounted(){
+    this.$request.post(this.$getUrl('members')).send({
+      isManager:true
+    }).then((res)=>{
+      res.body.dto.results.forEach((item) =>{
+        this.teamManagers.push({
+          name: item.nickname,
+          memberId: item.id
+        })
+      })
+      console.log(this.teamManagers)
+    },(err)=>{
+      console.log(111111)
+    })
+  },
+  methods:{
+    confirmBtn(){
+      this.$request.post(this.$getUrl('group/123456')).send({
+        name:this.teamName,
+        brief:this.teamBrief,
+        logo: 'lll',
+        manager:{
+          id: this.selectedManagerId
+        }
+      }).then((res)=>{
+
+      },(err)=>{
+        console.log(11111)
+      })
+      this.$router.push('team')
+    }
+  }
 }
 </script>
 

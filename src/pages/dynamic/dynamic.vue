@@ -1,15 +1,4 @@
 <style lang="scss" scoped>
-
-th, td {
-  vertical-align: middle;
-  text-align: center;
-}
-
-.title-td {
-  text-align:left;
-  width:400px;
-  overflow: hidden;
-}
 </style>
 
 <template lang="html">
@@ -22,7 +11,7 @@ th, td {
           全部
         </label>
         <label class="radio">
-          <input type="radio" name="question">
+          <input type="radio" name="question" :value="status">
           非小组动态
         </label>
         <label class="radio">
@@ -39,13 +28,16 @@ th, td {
 
       <button class="button">搜索</button>
       <button class="button">重置</button>
+      <div class="">
+        数量：1000条
+      </div>
     </div>
 
     <div>
       <table class="table is-striped">
         <thead>
           <th style="max-width:200px;">标题</th>
-          <th>交易id</th>
+          <!-- <th>交易id</th> -->
           <th>用户昵称</th>
           <th>发布时间</th>
           <th>所属小组</th>
@@ -54,77 +46,101 @@ th, td {
           <th>操作</th>
         </thead>
         <tbody>
-          <tr v-for="dynamic in dynamicDatas">
-            <td class="title-td">{{dynamic.title}}</td>
-            <td>{{dynamic.dealId}}</td>
+          <tr v-for="(dynamic,index) in dynamicDatas">
+            <td class="title-td w400">{{dynamic.title}}</td>
+            <!-- <td>{{dynamic.dealId}}</td> -->
             <td>{{dynamic.nickname}}</td>
-            <td>{{dynamic.publishTime}}</td>
-            <td>{{dynamic.team}}</td>
-            <td>{{dynamic.readAmount}}</td>
-            <td>{{dynamic.status}}</td>
+            <td>{{dynamic.createTime | dateFormat }}</td>
+            <td>{{(dynamic.groupName === null) ? '-' : dynamic.groupName }}</td>
+            <td>{{dynamic.readCount}}</td>
+            <td>{{dynamic.statusDescribe}}</td>
             <td>
-              <button class="button is-info">查看</button>
-              <button class="button is-info">删帖</button>
-              <button class="button is-info" v-show="false">恢复</button>
+              <button class="button" @click="readClick(index)">查看</button>
+              <button class="button">删帖</button>
+              <button class="button" v-show="false">恢复</button>
             </td>
           </tr>
         </tbody>
+        <tfoot v-show="pageshow">
+          <tr>
+            <td colspan="8">
+              <pagination :total-page='totalPage' @pagination-change="changePage"></pagination>
+            </td>
+          </tr>
+        </tfoot>
       </table>
     </div>
-
-    <pagination :total="20" @pagination-change="changePage"></pagination>
   </div>
 </template>
 
 <script>
 
 import pagination from '../../components/pagination'
-
+import moment from 'moment'
 export default {
   name: 'dynamic',
 
   data() {
     return {
-      dynamicDatas: [
-        {
-          title: '上文引立公0005号关于上文引立公0005号关于上文引立公0005号关于上文引立公0005号关于上文引立公0005号关于',
-          dealId: 124,
-          nickname: '村夫',
-          publishTime: '2016-11-11 15:20',
-          team: '有油壹分小组',
-          readAmount: 1000,
-          status: 0,
-        },
-        {
-          title: '上文引立公0005号关于',
-          dealId: 124,
-          nickname: '村夫',
-          publishTime: '2016-11-11 15:20',
-          team: '有油壹分小组',
-          readAmount: 1000,
-          status: 0,
-        },
-        {
-          title: '上文引立公0005号关于',
-          dealId: 124,
-          nickname: '村夫',
-          publishTime: '2016-11-11 15:20',
-          team: '有油壹分小组',
-          readAmount: 1000,
-          status: 0,
-        }
-      ]
+      queryPage:1,
+      querySize:10,
+      dynamicDatas: [ ],
+      totalPage:0,
+      pageshow:false
     }
+  },
+
+  computed:{
+    totalNum(){
+      return
+    }
+  },
+
+  mounted(){
+    this.dynamicList()
   },
 
   methods: {
     changePage(page) {
-      console.log(page);
+      this.queryPage = page
+      this.dynamicList()
+    },
+    dynamicList(){
+      this.$request.post(this.$getUrl('dynamics')).send(
+        {
+          basePageResults: {
+            pageNo: this.queryPage,
+            pageSize: this.querySize,
+          }
+          // statusVal:this.status
+        }).then((res)=>{
+          this.dynamicDatas = res.body.dto.results
+          this.totalPage =  res.body.dto.count / this.querySize
+
+          if(this.totalPage < 1){
+            this.pageshow = false
+            this.totalPage = 0
+          }else if(this.totalPage >= 1){
+            this.pageshow = true
+            this.totalPage = Math.ceil(this.totalPage)
+          }
+        },(err)=>{
+          console.log(2222)
+        })
+    },
+    readClick(index){
+      this.$router.push('dynamicDetail/'+this.dynamicDatas[index].id)
     }
   },
 
   components: {
     pagination
+  },
+
+  filters: {
+    dateFormat(value) {
+      return moment(value).format('YYYY-MM-DD HH:mm:ss')
+    }
   }
 }
 </script>

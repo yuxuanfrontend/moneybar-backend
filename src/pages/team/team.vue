@@ -1,14 +1,12 @@
 <style lang="scss">
-th,td{
+.table th,.table td{
   text-align: center;
   font-family: "微软雅黑";
+  vertical-align: middle;
 }
 td a{
   color: #666;
   margin: 0 5px
-}
-.center-title{
-  text-align: left;
 }
 </style>
 
@@ -20,8 +18,8 @@ td a{
       <input class="input mb-filter__input" type="text" placeholder="结束日期" ref="endDate" v-model="endDate">
       <!-- <date-picker field="myDate" placeholder="开始时间" v-model="dateBegin" format="yyyy/mm/dd"></date-picker>
       <date-picker field="myDate" placeholder="结束时间" v-model="dateEnd" format="yyyy/mm/dd"></date-picker> -->
-      <button class="button is-info mb-filter__button">搜索</button>
-      <button class="button is-info mb-filter__button">重置</button>
+      <button class="button mb-filter__button">搜索</button>
+      <button class="button mb-filter__button">重置</button>
       数量2个
       <button class="button is-info mb-filter__button is-pulled-right" @click="newAddTeam">新增</button>
     </div>
@@ -41,8 +39,8 @@ td a{
         </thead>
         <tbody>
           <tr v-for="(team,index) in teams">
-            <td class="center-title" >
-              <a v-on:click="teamList(team)">{{ team.name }}</a>
+            <td class="title-td" >
+              <a v-on:click="teamListBtn(team)">{{ team.name }}</a>
             </td>
             <td>
               <img :src="team.logo" alt="" class="icon">
@@ -52,12 +50,13 @@ td a{
             <!-- <td>{{ team.teamNum }}</td> -->
             <td>{{ team.dynamicCount }}</td>
             <!-- <td>{{ team.topicNum + ' / ' + team.followNum }}</td> -->
-            <td><a class="button is-small">编辑</a><a class="button is-small" @click="teamDelete(index)">删除</a></td>
+            <td><a class="button">编辑</a><a class="button" @click="teamDelete(index)">删除</a></td>
           </tr>
         </tbody>
-        <tfoot>
+        <tfoot v-show="pageshow">
           <tr>
             <td colspan="8">
+              <pagination :total-page="totalPage" @pagination-change="changePage"></pagination>
             </td>
           </tr>
         </tfoot>
@@ -71,33 +70,60 @@ import Flatpickr from 'flatpickr'
 import datePickerZh from 'flatpickr/dist/l10n/zh'
 import Img from '../../assets/logo.png'
 
+import pagination from '../../components/pagination'
+
+import moment from 'moment'
+
 Flatpickr.localize(datePickerZh.zh)
 export default {
+  components: {
+    pagination
+  },
   data () {
     return {
-      teams:[
-        {id:1,name:'油一分小组',logo:Img,memberName:'李福朕',createTime:'2017-12-12',dynamicCount:'10'},
-        {id:2,name:'油二分小组',logo:Img,memberName:'李福朕',createTime:'2017-12-12',dynamicCount:'10'},
-        {id:3,name:'油三分小组',logo:Img,memberName:'李福朕',createTime:'2017-12-12',dynamicCount:'10'},
-        {id:4,name:'油四分小组',logo:Img,memberName:'李福朕',createTime:'2017-12-12',dynamicCount:'10'}
-      ]
+      queryPage:1,
+      querySize:10,
+      totalPage:0,
+      pageshow:false,
+      teams:[]
     }
   },
   mounted(){
-
     new Flatpickr(this.$refs.startDate)
     new Flatpickr(this.$refs.endDate)
 
-    this.$request.post(this.$getUrl('groups'))
-      .send({
-      }).then((res)=>{
-        //this.teams = res.body.dto
-      },(err)=>{
-        console.log(1111)
-      })
+    this.teamList()
+
   },
   methods:{
-    teamList(team){
+    changePage(page) {
+      this.queryPage = page
+      this.teamList()
+    },
+    teamList(){
+      this.$request.post(this.$getUrl('groups')).send(
+        {
+          basePageResults: {
+            pageNo: this.queryPage,
+            pageSize: this.querySize,
+          }
+          // statusVal:this.status
+        }).then((res)=>{
+          this.teams = res.body.dto.results
+          this.totalPage =  res.body.dto.count / this.querySize
+
+          if(this.totalPage < 1){
+            this.pageshow = false
+            this.totalPage = 0
+          }else if(this.totalPage >= 1){
+            this.pageshow = true
+            this.totalPage = Math.ceil(this.totalPage)
+          }
+        },(err)=>{
+          console.log(2222)
+        })
+    },
+    teamListBtn(team){
       this.$router.push('teamlist/'+team.id)
     },
     teamDelete(index){

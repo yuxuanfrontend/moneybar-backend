@@ -37,7 +37,7 @@
               <td>{{ team.pubulish }}</td>
               <td>{{ team.readcount }}</td>
               <td>{{ team.status }}</td>
-              <td><a class="button is-small">编辑</a><a class="button is-small" @click="teamDynamicDelete(index)">删除</a></td>
+              <td><a class="button">编辑</a><a class="button" @click="teamDynamicDelete(index)">删除</a></td>
             </tr>
           </tbody>
         </table>
@@ -78,7 +78,13 @@ export default {
       console.log(index)
       this.teams.splice(index,1)
     }
-  }
+  },
+  beforeRouteEnter(to, from, next) {
+    alert(1000)
+
+
+    next()
+ },
 }
 </script>
 
@@ -89,6 +95,7 @@ export default {
 }
 .table tr th,.table tr td{
   text-align: center;
+  vertical-align: middle;
 }
 .table tbody tr td:first-child{
   width: 600px;
