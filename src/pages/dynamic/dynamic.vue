@@ -46,9 +46,9 @@
           <th>操作</th>
         </thead>
         <tbody>
-          <tr v-for="(dynamic,index) in dynamicDatas">
-            <td class="title-td w400">{{dynamic.title}}</td>
-            <!-- <td>{{dynamic.dealId}}</td> -->
+          <tr v-for="dynamic in dynamicDatas">
+            <td class="title-td" @click="$router.push('/dynamic-detail')">{{dynamic.title}}</td>
+            <td>{{dynamic.dealId}}</td>
             <td>{{dynamic.nickname}}</td>
             <td>{{dynamic.createTime | dateFormat }}</td>
             <td>{{(dynamic.groupName === null) ? '-' : dynamic.groupName }}</td>
