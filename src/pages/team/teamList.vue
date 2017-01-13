@@ -21,7 +21,6 @@
           <thead>
             <tr>
               <th>标题</th>
-              <th>微信ID</th>
               <th>用户昵称</th>
               <th>发布时间</th>
               <th>阅读次数</th>
@@ -32,11 +31,10 @@
           <tbody>
             <tr v-for="(team,index) in teams">
               <td>{{ team.title }}</td>
-              <td>{{ team.userId }}</td>
-              <td>{{ team.username }}</td>
-              <td>{{ team.pubulish }}</td>
-              <td>{{ team.readcount }}</td>
-              <td>{{ team.status }}</td>
+              <td>{{ team.nickname }}</td>
+              <td>{{ team.createTime }}</td>
+              <td>{{ team.readCount }}</td>
+              <td>{{ team.statusDescribe }}</td>
               <td><a class="button">编辑</a><a class="button" @click="teamDynamicDelete(index)">删除</a></td>
             </tr>
           </tbody>
@@ -55,13 +53,7 @@ Flatpickr.localize(datePickerZh.zh)
 export default {
   data () {
     return {
-      teams:[
-        {title:'上文引立公0005号关于《2016猴年贺岁纪念币》等艺术品预约及托管延期公告',userId:123456,username:'诸葛村夫',pubulish:'2016-12-12',readcount:1000,status:'发布中'},
-        {title:'上文引立公0005号关于《2016猴年贺岁纪念币》等艺术品预约及托管延期公告',userId:123456,username:'诸葛村夫',pubulish:'2016-12-12',readcount:1000,status:'发布中'},
-        {title:'上文引立公0005号关于《2016猴年贺岁纪念币》等艺术品预约及托管延期公告',userId:123456,username:'诸葛村夫',pubulish:'2016-12-12',readcount:1000,status:'发布中'},
-        {title:'上文引立公0005号关于《2016猴年贺岁纪念币》等艺术品预约及托管延期公告',userId:123456,username:'诸葛村夫',pubulish:'2016-12-12',readcount:1000,status:'发布中'},
-        {title:'上文引立公0005号关于《2016猴年贺岁纪念币》等艺术品预约及托管延期公告',userId:123456,username:'诸葛村夫',pubulish:'2016-12-12',readcount:1000,status:'发布中'}
-      ]
+      teams:[]
     }
   },
   computed:{
@@ -72,6 +64,28 @@ export default {
   mounted(){
     new Flatpickr(this.$refs.startDate)
     new Flatpickr(this.$refs.endDate)
+
+    console.log(this.$route.params.id)
+
+    this.$request.post(this.$getUrl('dynamics')).send({
+      basePageResults: {
+        pageNo: this.queryPage,
+        pageSize: this.querySize,
+      },
+      group :{
+        id:this.$route.params.id
+      }
+
+    }).then((res)=>{
+      console.log(res)
+      this.teams = res.body.dto.results
+    },(err)=>{
+
+    })
+
+
+
+
   },
   methods:{
     teamDynamicDelete(index){
@@ -80,9 +94,7 @@ export default {
     }
   },
   beforeRouteEnter(to, from, next) {
-    alert(1000)
-
-
+    // alert(1000)
     next()
  },
 }
@@ -98,7 +110,6 @@ export default {
   vertical-align: middle;
 }
 .table tbody tr td:first-child{
-  width: 600px;
   text-align: left;
 }
 </style>

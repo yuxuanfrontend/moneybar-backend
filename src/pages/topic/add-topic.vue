@@ -29,7 +29,7 @@ export default {
         console.log(res)
         this.$router.push('topic')
       },(err)=>{
-
+        console.log(1111)
       })
     }
   }

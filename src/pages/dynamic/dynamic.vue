@@ -56,7 +56,7 @@
             <td>{{dynamic.statusDescribe}}</td>
             <td>
               <button class="button" @click="readClick(index)">查看</button>
-              <button class="button">删帖</button>
+              <button class="button" @click="deleteClick(index)">删帖</button>
               <button class="button" v-show="false">恢复</button>
             </td>
           </tr>
@@ -130,6 +130,9 @@ export default {
     },
     readClick(index){
       this.$router.push('dynamicDetail/'+this.dynamicDatas[index].id)
+    },
+    deleteClick(index){
+      this.dynamicDatas.splice(index,1)
     }
   },
 

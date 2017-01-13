@@ -127,8 +127,14 @@ export default {
       this.$router.push('teamlist/'+team.id)
     },
     teamDelete(index){
-      console.log(index)
-      this.teams.splice(index,1)
+      this.$request.delete(this.$getUrl('group/123456')).query({
+        id:this.teams[index].id
+      }).then((res)=>{
+        console.log(11111)
+      },(err)=>{
+
+      })
+      // this.teams.splice(index,1)
     },
     newAddTeam(){
       console.log(1111)
