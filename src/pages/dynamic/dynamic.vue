@@ -55,7 +55,7 @@ th, td {
         </thead>
         <tbody>
           <tr v-for="dynamic in dynamicDatas">
-            <td class="title-td">{{dynamic.title}}</td>
+            <td class="title-td" @click="$router.push('/dynamic-detail')">{{dynamic.title}}</td>
             <td>{{dynamic.dealId}}</td>
             <td>{{dynamic.nickname}}</td>
             <td>{{dynamic.publishTime}}</td>

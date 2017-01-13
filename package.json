@@ -16,6 +16,7 @@
     "normalize.css": "^5.0.0",
     "superagent": "^3.3.1",
     "vue": "^2.0.1",
+    "vue-file-upload": "^0.1.1",
     "vue-router": "^2.0.1",
     "vuex": "^2.1.1"
   },
