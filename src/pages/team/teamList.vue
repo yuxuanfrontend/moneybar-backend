@@ -65,17 +65,11 @@ export default {
     new Flatpickr(this.$refs.startDate)
     new Flatpickr(this.$refs.endDate)
 
-    console.log(this.$route.params.id)
 
     this.$request.post(this.$getUrl('dynamics')).send({
-      basePageResults: {
-        pageNo: this.queryPage,
-        pageSize: this.querySize,
-      },
       group :{
         id:this.$route.params.id
       }
-
     }).then((res)=>{
       console.log(res)
       this.teams = res.body.dto.results
@@ -83,14 +77,15 @@ export default {
 
     })
 
-
-
-
   },
   methods:{
     teamDynamicDelete(index){
-      console.log(index)
-      this.teams.splice(index,1)
+      this.$request.delete(this.$getUrl('dynamic/'+this.teams[index].id)).then((res)=>{
+        this.teams.splice(index,1)
+        console.log(11111)
+      },(err)=>{
+
+      })
     }
   },
   beforeRouteEnter(to, from, next) {

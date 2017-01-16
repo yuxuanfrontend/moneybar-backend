@@ -46,9 +46,9 @@
           <th>操作</th>
         </thead>
         <tbody>
-          <tr v-for="dynamic in dynamicDatas">
+          <tr v-for="(dynamic,index) in dynamicDatas">
             <td class="title-td" @click="$router.push('/dynamic-detail')">{{dynamic.title}}</td>
-            <td>{{dynamic.dealId}}</td>
+            <!-- <td>{{dynamic.dealId}}</td> -->
             <td>{{dynamic.nickname}}</td>
             <td>{{dynamic.createTime | dateFormat }}</td>
             <td>{{(dynamic.groupName === null) ? '-' : dynamic.groupName }}</td>
@@ -132,7 +132,12 @@ export default {
       this.$router.push('dynamicDetail/'+this.dynamicDatas[index].id)
     },
     deleteClick(index){
-      this.dynamicDatas.splice(index,1)
+      this.$request.post(this.$getUrl('dynamic/delete/'+this.dynamicDatas[index].id+'?memberId='+123456)).send().then((res)=>{
+        console.log(1)
+        this.dynamicDatas.splice(index,1)
+      },(err)=>{
+
+      })
     }
   },
 
