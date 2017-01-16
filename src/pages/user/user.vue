@@ -43,7 +43,7 @@ th,td{
             <td>{{ user.reportDynamicCount +  user.reportCommentCount  }}</td>
             <td><a @click="reportDynamic">{{ user.reportDynamicCount }}</a></td>
             <td><a @click="reportComment">{{ user.reportCommentCount }}</a></td>
-            <td><a class="button">{{ (status == 0)? '禁言':'恢复' }}</a></td>
+            <td><a class="button" @click="silent(user)">{{ (user.statusVal === '0')? '禁言':'恢复' }}</a></td>
           </tr>
         </tbody>
         <tfoot v-show="pageshow">
@@ -74,7 +74,6 @@ export default {
   },
   data () {
     return {
-      status:1,
       users:[],
       queryPage:1,
       querySize:10,
@@ -90,7 +89,6 @@ export default {
   },
   methods:{
     changePage(page) {
-      console.log(page);
       this.queryPage = page
       this.userList()
     },
@@ -100,14 +98,13 @@ export default {
         basePageResults: {
           pageNo: this.queryPage,
           pageSize: this.querySize,
-        }
+        },
         // statusVal:this.status
       })
       .then((res)=>{
         this.users = res.body.dto.results
         this.totalPage = res.body.dto.count / this.querySize
 
-        console.log(res.body.dto.count)
         if(this.totalPage < 1){
           this.pageshow =false
         }else if(this.totalPage > 1){
@@ -124,6 +121,23 @@ export default {
     },
     reportComment(){
       this.$router.push('reportcomment')
+    },
+    silent(user) {
+      if (user.statusVal === '0') {
+        this.$request.post(this.$getUrl('members/shutup/' + user.openId))
+        .then((res) => {
+          if (res.body.responseCode === '000') {
+            user.statusVal = '1'
+          }
+        })
+      } else {
+        this.$request.post(this.$getUrl('members/cancelShutup/' + user.openId))
+        .then((res) => {
+          if (res.body.responseCode === '000') {
+            user.statusVal = '0'
+          }
+        })
+      }
     }
   },
   filters: {
