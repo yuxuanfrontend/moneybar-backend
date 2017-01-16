@@ -14,7 +14,9 @@
             <td><label>小组logo：</label></td>
             <td>
               <div class="file-input">
-                <input type="file" placeholder="小组名称" >
+                <!-- <vue-file-upload url="my.do" :max="1" @onAdd="addFiles"></vue-file-upload> -->
+                <input type="file" @change="chooseFile" ref="file">
+                <img style="width: 50px;" :src="previewImg" alt="">
               </div>
             </td>
           </tr>
@@ -62,6 +64,8 @@
 
 <script>
 
+import vueFileUpload from 'vue-file-upload'
+
 export default {
   name:'newAddTeam',
   data () {
@@ -70,7 +74,10 @@ export default {
       teamBrief:'',
       teamManager:'',
       teamManagers:[],
-      selectedManagerId: ''
+      selectedManagerId: '',
+
+      // files: [],
+      previewImg: ''
     }
   },
   mounted(){
@@ -79,11 +86,10 @@ export default {
     }).then((res)=>{
       res.body.dto.results.forEach((item) =>{
         this.teamManagers.push({
-          name: item.nickname,
+          name: item.name,
           memberId: item.id
         })
       })
-      console.log(this.teamManagers)
     },(err)=>{
       console.log(111111)
     })
@@ -93,7 +99,10 @@ export default {
       this.$request.post(this.$getUrl('group/123456')).send({
         name:this.teamName,
         brief:this.teamBrief,
-        logo: 'lll',
+        attachment: {
+          path: this.previewImg
+        },
+        logo: this.previewImg,
         manager:{
           id: this.selectedManagerId
         }
@@ -103,7 +112,41 @@ export default {
         console.log(11111)
       })
       this.$router.push('team')
+    },
+
+    chooseFile() {
+      let choosedFile = this.$refs.file.files[0]
+      let fileReader = new FileReader()
+      let sendData = new FormData()
+
+      fileReader.readAsDataURL(choosedFile)
+
+      fileReader.onload = () => {
+        this.previewImg = fileReader.result
+      }
+
+      sendData.append('file', choosedFile)
+
+      this.$request.post('http://192.168.228.236:8081/api/upload/files')
+        .send(sendData)
+        .then((res) => {
+          this.previewImg = res.body.t
+        })
     }
+
+    // addFiles(files) {
+    //   console.log(files);
+    //   this.files = files
+    // },
+    //
+    // previewImg() {
+    //   let src = window.URL.createObjectURL(this.files[this.files.length - 1].file);
+    //   return src;
+    // }
+  },
+
+  components: {
+    vueFileUpload
   }
 }
 </script>
