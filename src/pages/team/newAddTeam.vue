@@ -64,7 +64,6 @@
 
 <script>
 
-import vueFileUpload from 'vue-file-upload'
 
 export default {
   name:'newAddTeam',
@@ -143,11 +142,8 @@ export default {
     //   let src = window.URL.createObjectURL(this.files[this.files.length - 1].file);
     //   return src;
     // }
-  },
-
-  components: {
-    vueFileUpload
   }
+
 }
 </script>
 

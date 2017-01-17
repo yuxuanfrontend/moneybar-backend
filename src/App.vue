@@ -20,8 +20,8 @@ html,body{
 <template>
   <div id="app">
     <managementhead></managementhead>
-    <managementwrap></managementwrap>
-    <!-- <router-view></router-view> -->
+    <!-- <managementwrap></managementwrap> -->
+    <router-view></router-view>
 
     <!-- <section class="hero is-primary">
       <div class="hero-body">

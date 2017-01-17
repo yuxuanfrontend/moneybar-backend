@@ -18,7 +18,7 @@ td a{
       <input class="input mb-filter__input" type="text" placeholder="结束日期" ref="endDate" v-model="endDate">
       <!-- <date-picker field="myDate" placeholder="开始时间" v-model="dateBegin" format="yyyy/mm/dd"></date-picker>
       <date-picker field="myDate" placeholder="结束时间" v-model="dateEnd" format="yyyy/mm/dd"></date-picker> -->
-      <button class="button mb-filter__button">搜索</button>
+      <button class="button mb-filter__button" @click="searchBtn">搜索</button>
       <button class="button mb-filter__button">重置</button>
       数量2个
       <button class="button is-info mb-filter__button is-pulled-right" @click="newAddTeam">新增</button>
@@ -46,7 +46,7 @@ td a{
               <img :src="team.logo" alt="" class="icon">
             </td>
             <td>{{ team.memberName }}</td>
-            <td>{{ team.createTime }}</td>
+            <td>{{ team.createTime | dateFormat }}</td>
             <!-- <td>{{ team.teamNum }}</td> -->
             <td>{{ team.dynamicCount }}</td>
             <!-- <td>{{ team.topicNum + ' / ' + team.followNum }}</td> -->
@@ -81,6 +81,9 @@ export default {
   },
   data () {
     return {
+      teamText:'',
+      startDate:'',
+      endDate:'',
       queryPage:1,
       querySize:10,
       totalPage:0,
@@ -106,9 +109,37 @@ export default {
           basePageResults: {
             pageNo: this.queryPage,
             pageSize: this.querySize,
-          }
+          },
           // statusVal:this.status
         }).then((res)=>{
+          this.teams = res.body.dto.results
+          this.totalPage =  res.body.dto.count / this.querySize
+
+          if(this.totalPage < 1){
+            this.pageshow = false
+            this.totalPage = 0
+          }else if(this.totalPage >= 1){
+            this.pageshow = true
+            this.totalPage = Math.ceil(this.totalPage)
+          }
+        },(err)=>{
+          console.log(2222)
+        })
+    },
+    searchBtn(){
+      var teamData = {
+            basePageResults:{
+              pageNo: this.queryPage,
+              pageSize: this.querySize,
+            },
+            name: this.teamText,
+            beginCreateTime:   moment(this.startDate + ' 00:00:00').valueOf(),
+            endCreateTime:   moment(this.endDate + ' 23:59:59').valueOf(),
+            // statusVal:this.status
+          }
+      this.$request.post(this.$getUrl('groups')).send(
+          teamData
+        ).then((res)=>{
           this.teams = res.body.dto.results
           this.totalPage =  res.body.dto.count / this.querySize
 
@@ -139,6 +170,11 @@ export default {
     newAddTeam(){
       console.log(1111)
       this.$router.push('newaddteam')
+    }
+  },
+  filters: {
+    dateFormat(value) {
+      return moment(value).format('YYYY-MM-DD HH:mm:ss')
     }
   }
 }

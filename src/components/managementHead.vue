@@ -3,10 +3,10 @@
     <div class="logobox">
       <img src="../assets/u324.png" alt="">上文引立
     </div>
-    <!-- <div class="loginbox">
+    <div class="loginbox">
       <a v-on:click="loginbtn">{{ loginTxt }}</a>
-      <a v-on:click='fetch' v-if="$store.state.isLogin">退出</a>
-    </div> -->
+      <a v-on:click='fetch'>退出</a>
+    </div>
   </div>
 </template>
 
@@ -28,17 +28,10 @@ export default {
   },
   methods:{
     loginbtn(){
-      if(this.$store.state.isLogin){
-        return false
-      }else{
-        this.$router.push('/')
-      }
+        this.$router.push('login')
     },
     fetch(){
-      this.$http.get('https://backend-api.yinli99.com/api/wechat/operation/logout?token='+window.localStorage.token).then((res)=>{
-        this.$store.commit('setIsLogin',false)
-        this.$router.push('/')
-      })
+
     }
   }
 }
@@ -51,7 +44,7 @@ export default {
   color:#fff;
   font-family: "微软雅黑";
   width: 100%;
-  justify-content:space-between;
+  justify-content: space-between;
   align-items: center;
   position: absolute;
   left:0;
@@ -59,6 +52,7 @@ export default {
   z-index: 1
 }
 .managementhead .logobox{
+  width:160px;
   line-height: 40px;
   display: inline-flex;
   align-items: center;
@@ -70,6 +64,9 @@ export default {
 }
 .managementhead .loginbox{
   font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
   margin-right: 20px;
 }
 .loginbox a{

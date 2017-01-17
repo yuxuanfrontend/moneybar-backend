@@ -9,10 +9,10 @@ th,td{
   <div class="my-container">
     <div class="mb-title">举报管理</div>
     <div class="mb-filter">
-      <input class="input mb-filter__input" type="text" placeholder="用户昵称">
-      <input class="input mb-filter__input" type="text" placeholder="开始日期" ref="startDate">至
-      <input class="input mb-filter__input" type="text" placeholder="结束日期" ref="endDate">
-      <button class="button mb-filter__button">搜索</button>
+      <input class="input mb-filter__input" type="text" placeholder="用户昵称" v-model="userName">
+      <input class="input mb-filter__input" type="text" placeholder="开始日期" ref="startDate" v-model="startDate">至
+      <input class="input mb-filter__input" type="text" placeholder="结束日期" ref="endDate" v-model="endDate">
+      <button class="button mb-filter__button" @click="searchUser">搜索</button>
       <button class="button mb-filter__button">重置</button>
       <div class="">
         被举报数量：1000条
@@ -74,6 +74,9 @@ export default {
   },
   data () {
     return {
+      userName:'',
+      startDate:'',
+      endDate:'',
       users:[],
       queryPage:1,
       querySize:10,
@@ -101,6 +104,35 @@ export default {
         },
         // statusVal:this.status
       })
+      .then((res)=>{
+        this.users = res.body.dto.results
+        this.totalPage = res.body.dto.count / this.querySize
+
+        if(this.totalPage < 1){
+          this.pageshow =false
+        }else if(this.totalPage > 1){
+          this.pageshow =true
+          this.totalPage = Math.ceil(this.totalPage)
+        }
+
+      },(err)=>{
+        console.log(res.body.responseMsg)
+      })
+    },
+    searchUser(){
+      var teamData = {
+            basePageResults:{
+              pageNo: this.queryPage,
+              pageSize: this.querySize,
+            },
+            nickname: this.userName,
+            beginCreateTime:   moment(this.startDate + ' 00:00:00').valueOf(),
+            endCreateTime:   moment(this.endDate + ' 23:59:59').valueOf(),
+            // statusVal:this.status
+          }
+      this.$request.post(this.$getUrl('members')).send(
+        teamData
+      )
       .then((res)=>{
         this.users = res.body.dto.results
         this.totalPage = res.body.dto.count / this.querySize

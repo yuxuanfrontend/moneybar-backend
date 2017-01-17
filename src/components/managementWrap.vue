@@ -7,15 +7,11 @@
 
 <script>
 import managementmenu from './managementMenu'
-// import managementcontent from './managementContent'
-// import managementadd from './managementAdd'
 
 export default {
   name:'managementWrap',
   components:{
     managementmenu,
-    // managementcontent,
-    // managementadd
   }
 }
 </script>

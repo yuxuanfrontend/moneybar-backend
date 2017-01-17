@@ -23,10 +23,10 @@
     <div class="mb-filter">
       <input class="input mb-filter__input" type="text" placeholder="动态标题">
       <input class="input mb-filter__input" type="text" placeholder="用户昵称">
-      <input class="input mb-filter__input" type="text" placeholder="开始日期">至
-      <input class="input mb-filter__input" type="text" placeholder="结束日期">
+      <input class="input mb-filter__input" type="text" placeholder="开始日期" ref="startDate" >至
+      <input class="input mb-filter__input" type="text" placeholder="结束日期" ref="endDate">
 
-      <button class="button">搜索</button>
+      <button class="button" >搜索</button>
       <button class="button">重置</button>
       <div class="">
         数量：1000条
@@ -74,6 +74,9 @@
 </template>
 
 <script>
+import Flatpickr from 'flatpickr'
+import datePickerZh from 'flatpickr/dist/l10n/zh'
+import Img from '../../assets/logo.png'
 
 import pagination from '../../components/pagination'
 import moment from 'moment'
@@ -97,6 +100,9 @@ export default {
   },
 
   mounted(){
+    new Flatpickr(this.$refs.startDate)
+    new Flatpickr(this.$refs.endDate)
+
     this.dynamicList()
   },
 
