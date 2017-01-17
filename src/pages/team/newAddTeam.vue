@@ -102,7 +102,6 @@ export default {
         attachment: {
           path: this.previewImg
         },
-        logo: this.previewImg,
         manager:{
           id: this.selectedManagerId
         }
@@ -116,14 +115,14 @@ export default {
 
     chooseFile() {
       let choosedFile = this.$refs.file.files[0]
-      let fileReader = new FileReader()
       let sendData = new FormData()
-
-      fileReader.readAsDataURL(choosedFile)
-
-      fileReader.onload = () => {
-        this.previewImg = fileReader.result
-      }
+      // let fileReader = new FileReader()
+      //
+      // fileReader.readAsDataURL(choosedFile)
+      //
+      // fileReader.onload = () => {
+      //   this.previewImg = fileReader.result
+      // }
 
       sendData.append('file', choosedFile)
 
@@ -133,16 +132,6 @@ export default {
           this.previewImg = res.body.t
         })
     }
-
-    // addFiles(files) {
-    //   console.log(files);
-    //   this.files = files
-    // },
-    //
-    // previewImg() {
-    //   let src = window.URL.createObjectURL(this.files[this.files.length - 1].file);
-    //   return src;
-    // }
   },
 
   components: {
