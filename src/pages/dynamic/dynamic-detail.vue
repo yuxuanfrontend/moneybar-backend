@@ -62,8 +62,8 @@
   <div class="my-container">
     <h2 class="mb-title">动态内容</h2>
     <div class="detail-type">
-      <div>来自：{{ dynamicDatas.groupName }}</div>
-      <div>话题： {{ dynamicDatas.topicName }}</div>
+      <div v-if="dynamicDatas.groupName">来自：{{ dynamicDatas.groupName }}</div>
+      <div v-if="dynamicDatas.topicName">话题： {{ dynamicDatas.topicName }}</div>
     </div>
     <div class="detail-wrap">
       <div class="mb-detail-main">
@@ -74,7 +74,7 @@
           </div>
           <div class="mb-detail-main__head-right">
             <div>{{ dynamicDatas.createTime | dateFormat }}</div>
-            <div class="button is-info">删帖</div>
+            <div class="button is-info" @click="deleteDynamic">删帖</div>
           </div>
         </div>
 
@@ -86,15 +86,15 @@
 
       <div class="mb-detail-comments">
         <div class="mb-detail-comments__head">用户评论{{ dynamicDatas.commentCount}}</div>
-        <div class="mb-detail-comments__item" v-for="n in 3">
+        <div class="mb-detail-comments__item" v-for="comment in dynamicDatas.comments">
           <img class="mb-detail-comments__item-left" src="../../assets/logo.png" style="width:50px;height:50px;">
           <div class="mb-detail-comments__item-center font-small">
-            <div>用户昵称</div>
-            <div>回复内容回复内容回复内容回复内容回复内容回复内容回复内容回复内容</div>
+            <div>{{comment.nickname}}</div>
+            <div>{{comment.content}}</div>
           </div>
           <div class="mb-detail-comments__item-right">
-            <div>12-24</div>
-            <div class="button is-info">删帖</div>
+            <div>{{comment.createTime | my-date}}</div>
+            <div class="button is-info" @click="deleteComment(comment)">删评论</div>
           </div>
         </div>
       </div>
@@ -122,18 +122,35 @@ export default {
 
   },
   mounted(){
-    console.log()
     this.$request.post(this.$getUrl('dynamics')).send(
       {
         id:this.$route.params.id
       }).then((res)=>{
-        this.dynamicDatas = res.body.dto.results[0]
-      },(err)=>{
-        console.log(2222)
+        if (res.body.responseCode === '000') {
+          this.dynamicDatas = res.body.dto.results[0]
+        }
       })
   },
   methods:{
+    deleteDynamic() {
+      this.$request.delete(this.$getUrl('dynamic/' + this.$route.params.id))
+        .then(res => {
+          if (res.body.responseCode === '000') {
+            this.$router.back()
+          }
+        })
+    },
 
+    deleteComment(comment) {
+      this.$request.delete(this.$getUrl('comment/' + comment.id))
+        .then((res) => {
+          if (res.body.responseCode === '000') {
+            let index = this.dynamicDatas.comments.indexOf(comment)
+            this.dynamicDatas.comments.splice(index, 1)
+            this.dynamicDatas.commentCount--
+          }
+        })
+    }
   },
   filters: {
     dateFormat(value) {

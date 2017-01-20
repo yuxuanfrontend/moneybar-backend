@@ -150,7 +150,7 @@ export default {
     audit(dynamic) {
       this.$request.post(this.$getUrl('dynamic/check/' + dynamic.id))
         .query({
-          memberId: 123456,
+          memberId: '2dfa235dbb1484813500502',
           flag: true
         })
         .then((res) => {

@@ -23,6 +23,10 @@ Vue.use(VueSuperagent)
 // Vue.use(VueMdl)
 
 
+import moment from 'moment'
+Vue.filter('my-date', function(val) {
+  return moment(val).format('YYYY-MM-DD HH:mm')
+})
 
 
 const router = new VueRouter({

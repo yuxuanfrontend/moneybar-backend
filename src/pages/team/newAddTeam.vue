@@ -16,7 +16,7 @@
               <div class="file-input">
                 <!-- <vue-file-upload url="my.do" :max="1" @onAdd="addFiles"></vue-file-upload> -->
                 <input type="file" @change="chooseFile" ref="file">
-                <img style="width: 50px;" :src="previewImg" alt="">
+                <img style="width: 50px;vertical-align:middle;" :src="previewImg" alt="">
               </div>
             </td>
           </tr>
@@ -128,7 +128,7 @@ export default {
       this.$request.post('http://192.168.228.236:8081/api/upload/files')
         .send(sendData)
         .then((res) => {
-          this.previewImg = res.body.t
+          this.previewImg = res.body.dto.downloadPath
         })
     }
   },
