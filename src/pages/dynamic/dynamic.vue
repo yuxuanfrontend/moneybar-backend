@@ -47,7 +47,7 @@
         </thead>
         <tbody>
           <tr v-for="(dynamic,index) in dynamicDatas">
-            <td class="title-td" @click="$router.push('/dynamic-detail')">{{dynamic.title}}</td>
+            <td class="title-td">{{dynamic.title}}</td>
             <!-- <td>{{dynamic.dealId}}</td> -->
             <td>{{dynamic.nickname}}</td>
             <td>{{dynamic.createTime | dateFormat }}</td>
@@ -55,6 +55,7 @@
             <td>{{dynamic.readCount}}</td>
             <td>{{dynamic.statusDescribe}}</td>
             <td>
+              <button class="button" v-if="dynamic.statusVal === '0'" @click="audit(dynamic)">审核</button>
               <button class="button" @click="readClick(index)">查看</button>
               <button class="button" @click="deleteClick(index)">删帖</button>
               <button class="button" v-show="false">恢复</button>
@@ -144,6 +145,20 @@ export default {
       },(err)=>{
 
       })
+    },
+
+    audit(dynamic) {
+      this.$request.post(this.$getUrl('dynamic/check/' + dynamic.id))
+        .query({
+          memberId: 123456,
+          flag: true
+        })
+        .then((res) => {
+          if (res.body.responseCode === '000') {
+            dynamic.statusVal = res.body.dto.statusVal
+            dynamic.statusDescribe = res.body.dto.statusDescribe
+          }
+        })
     }
   },
 

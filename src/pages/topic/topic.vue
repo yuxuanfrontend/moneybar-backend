@@ -30,7 +30,7 @@
             <td>{{ topic.createTime | dateFormat }}</td>
             <td>{{ topic.dynamicCount }}</td>
             <!-- <td>{{ topic.personNum }}</td> -->
-            <td><a class="button" @click="shelveBtn(index)">下架</a></td>
+            <td><a class="button" @click="shelveBtn(topic)">{{topic.statusVal === '0' ? '下架' : '已下架'}}</a></td>
           </tr>
         </tbody>
         <tfoot v-show="pageshow">
@@ -95,18 +95,15 @@ export default {
     addTopic(){
       this.$router.push('addtopic')
     },
-    shelveBtn(index){   //话题下架
-      this.$request.post(this.$getUrl('topic/'+this.topics[index].id)).send(
-        {
-          basePageResults: {
-            pageNo: this.queryPage,
-            pageSize: this.querySize
-          }
-        }).then((res)=>{
-        console.log(2222)
-      },(err)=>{
-        console.log(1111)
-      })
+    shelveBtn(topic){   //话题下架
+      if (topic.statusVal === '0') {
+        this.$request.post(this.$getUrl('topic/soldOut/'+topic.id))
+        .then((res)=>{
+          topic.statusVal === '1'
+        },(err)=>{
+          console.log(1111)
+        })
+      }
     }
   },
   filters: {
