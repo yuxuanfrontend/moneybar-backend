@@ -33,6 +33,7 @@ export default {
       .then((res)=>{
         window.sessionStorage.memberId = res.body.dto.memberId
         window.sessionStorage.memberMenus = JSON.stringify(res.body.dto.menus)
+        this.$store.commit('login', res.body.dto.memberId)
         this.$router.push('/managementwrap/dynamic')
       },(err)=>{
         console.log(111)

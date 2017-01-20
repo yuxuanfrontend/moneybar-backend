@@ -4,8 +4,8 @@
       <img src="../assets/u324.png" alt="">上文引立
     </div>
     <div class="loginbox">
-      <a v-on:click="loginbtn">{{ loginTxt }}</a>
-      <a v-on:click='fetch' v-show="">退出</a>
+      <a v-on:click="loginbtn">{{ memberTxt }}</a>
+      <a v-on:click='fetch' v-show="fetchShow">退出</a>
     </div>
   </div>
 </template>
@@ -15,24 +15,38 @@ export default {
   name:'managementHead',
   data () {
     return {
+      // fetchShow:true,
+      // loginTxt:''
     }
   },
   computed:{
-    loginTxt(){
-      if(window.sessionStorage.memberId != ''){
-        return 'admin'
-      }
+    memberTxt(){
+      return !this.$store.state.identity.memberId ? '亲，请登录' : 'admin'
+    },
+
+    fetchShow() {
+      return this.$store.state.identity.memberId
     }
 
   },
   mounted(){
   },
   methods:{
+    loginTxt(){
+      if(window.sessionStorage.memberId != ''){
+        return 'admin'
+      }else{
+        return '亲，请登录'
+      }
+    },
     loginbtn(){
+      console.log(window.sessionStorage.memberId)
       this.$router.push('/login')
     },
     fetch(){
       window.sessionStorage.removeItem('memberId')
+      this.$store.commit('logout')
+      this.fetchShow = true
       this.$router.push('/login')
     }
   }

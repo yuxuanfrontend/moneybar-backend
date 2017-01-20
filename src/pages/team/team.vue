@@ -50,7 +50,7 @@ td a{
             <!-- <td>{{ team.teamNum }}</td> -->
             <td>{{ team.dynamicCount }}</td>
             <!-- <td>{{ team.topicNum + ' / ' + team.followNum }}</td> -->
-            <td><a class="button">编辑</a><a class="button" @click="teamDelete(index)">删除</a></td>
+            <td><a class="button" @click="editorTeam(index)">编辑</a><a class="button" @click="teamDelete(index)">删除</a></td>
           </tr>
         </tbody>
         <tfoot v-show="pageshow">
@@ -157,6 +157,9 @@ export default {
     teamListBtn(team){
       this.$router.push('teamlist/'+team.id)
     },
+    editorTeam(index){
+        this.$router.push({path:'newAddTeam',query: { teamId: this.teams[index].id }})
+    },
     teamDelete(index){
       this.$request.delete(this.$getUrl('group/'+window.sessionStorage.memberId)).query({
         id:this.teams[index].id
@@ -168,7 +171,6 @@ export default {
 
     },
     newAddTeam(){
-      console.log(1111)
       this.$router.push('newaddteam')
     }
   },

@@ -71,6 +71,7 @@ export default {
     return {
       teamName:'',
       teamBrief:'',
+      selectedManagerId:'',
       teamManager:'',
       teamManagers:[],
       selectedManagerId: '',
@@ -80,6 +81,27 @@ export default {
     }
   },
   mounted(){
+
+    console.log(this.$route.query.teamId);
+
+    this.$request.post(this.$getUrl('groups'))
+      .send({
+        id: this.$route.query.teamId
+      })
+      .then(res => {
+        if (res.body.responseCode === '000') {
+          this.teamName = res.body.dto.results[0].name
+          this.previewImg = res.body.dto.results[0].logo
+          this.selectedManagerId = res.body.dto.results[0].id
+          this.teamBrief = res.body.dto.results[0].brief
+        }else{
+          this.teamName=''
+          this.previewImg=''
+          this.selectedManagerId=''
+          this.teamBrief=''
+        }
+      })
+
     this.$request.post(this.$getUrl('members')).send({
       isManager:true
     }).then((res)=>{
