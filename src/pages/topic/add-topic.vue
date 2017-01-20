@@ -23,11 +23,11 @@ export default {
   },
   methods:{
     confirmBtn(){
-      this.$request.post(this.$getUrl('topic/123456')).send({
+      this.$request.post(this.$getUrl('topic/'+window.sessionStorage.memberId)).send({
         title:this.topicTitle
       }).then((res)=>{
         console.log(res)
-        //this.$router.push('topic')
+        this.$router.push('topic')
       },(err)=>{
         console.log(1111)
       })

@@ -17,12 +17,27 @@ export default {
   data () {
     return {
       username:'',
-      password:''
+      password:'',
+      userId:'',
     }
   },
   methods : {
     loginbtn (){
-      this.$router.push('dynamic')
+      this.$request.post('http://192.168.228.236:8083/mb-inrpc/mb/login')
+        .send({
+          username: this.username,
+          password: {
+            password: this.password
+          }
+        })
+      .then((res)=>{
+        window.sessionStorage.memberId = res.body.dto.memberId
+        window.sessionStorage.memberMenus = JSON.stringify(res.body.dto.menus)
+        this.$router.push('/managementwrap/dynamic')
+      },(err)=>{
+        console.log(111)
+      })
+
     }
   }
 }

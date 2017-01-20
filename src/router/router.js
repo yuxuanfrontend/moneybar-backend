@@ -31,9 +31,10 @@ module.exports = [
   },
 
   {
-    path:'/',
+    path:'/managementwrap',
     name:'',
     component:managementwrap,
+
     children:[
 
       {
@@ -43,55 +44,55 @@ module.exports = [
       },
 
       {
-        path: '/dynamicDetail/:id',
+        path: 'dynamicDetail/:id',
         name:'动态详情',
         component: dynamicDetail
       },
 
       {
-        path: '/team',
+        path: 'team',
         name:'小组管理',
         component: team
       },
 
       {
-        path:'/user',
+        path:'user',
         name:'用户管理',
         component:user
       },
 
       {
-        path:'/reportdynamic',
+        path:'reportdynamic',
         component:reportdynamic
       },
 
       {
-        path:'/reportcomment',
+        path:'reportcomment',
         component:reportcomment
       },
 
       {
-        path:'/teamlist/:id',
+        path:'teamlist/:id',
         component:teamlist
       },
 
       {
-        path:'/newaddteam',
+        path:'newaddteam',
         component:newaddteam
       },
 
       {
-        path: '/topic',
+        path: 'topic',
         component: topic
       },
 
       {
-        path:'/addtopic',
+        path:'addtopic',
         component:addtopic
       },
 
       {
-        path: '/user',
+        path: 'user',
         component: user
       }
     ]

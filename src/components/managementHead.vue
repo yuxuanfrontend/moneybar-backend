@@ -5,7 +5,7 @@
     </div>
     <div class="loginbox">
       <a v-on:click="loginbtn">{{ loginTxt }}</a>
-      <a v-on:click='fetch'>退出</a>
+      <a v-on:click='fetch' v-show="">退出</a>
     </div>
   </div>
 </template>
@@ -19,19 +19,21 @@ export default {
   },
   computed:{
     loginTxt(){
-      if(this.$store.state.isLogin){
+      if(window.sessionStorage.memberId != ''){
         return 'admin'
-      }else{
-        return '亲，请登陆'
       }
     }
+
+  },
+  mounted(){
   },
   methods:{
     loginbtn(){
-        this.$router.push('login')
+      this.$router.push('/login')
     },
     fetch(){
-
+      window.sessionStorage.removeItem('memberId')
+      this.$router.push('/login')
     }
   }
 }
@@ -70,6 +72,8 @@ export default {
   margin-right: 20px;
 }
 .loginbox a{
+  color:#fff;
   cursor: pointer;
+  margin: 0 5px;
 }
 </style>

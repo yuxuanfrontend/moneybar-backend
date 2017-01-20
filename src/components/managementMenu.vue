@@ -17,25 +17,53 @@ export default {
   data(){
     return{
       count:0,
-      managements:[
-        {managementTitle:'动态管理',href:'/dynamic'},
-        {managementTitle:'小组管理',href:'/team'},
-        {managementTitle:'用户管理',href:'/user'},
-        {managementTitle:'话题管理',href:'/topic'},
-      ]
+      managements:[]
     }
   },
   computed:{
   },
   mounted() {
-    // console.log(this.$route.path)
-    if (this.$route.path === '/dynamic') {
+
+    function getMenuTitle(id) {
+      if (id === 1) {
+        return '动态管理'
+      }else if(id === 2){
+        return '小组管理'
+      }else if(id === 3){
+        return '用户管理'
+      }else if(id === 4){
+        return '话题管理'
+      }
+    }
+
+    function getMenuHref(id) {
+      if (id === 1) {
+        return '/managementwrap/dynamic'
+      }else if(id === 2){
+        return '/managementwrap/team'
+      }else if(id === 3){
+        return '/managementwrap/user'
+      }else if(id === 4){
+        return '/managementwrap/topic'
+      }
+    }
+
+    let data = JSON.parse(window.sessionStorage.memberMenus)
+    data.forEach((item) => {
+      this.managements.push({
+        managementTitle: getMenuTitle(item.id),
+        href:getMenuHref(item.id)
+      })
+    })
+
+
+    if (this.$route.path === '/managementwrap/dynamic') {
       this.count = 0
-    }else if(this.$route.path === '/team'){
+    }else if(this.$route.path === '/managementwrap/team'){
       this.count = 1
-    }else if(this.$route.path === '/user'){
+    }else if(this.$route.path === '/managementwrap/user'){
       this.count = 2
-    }else if(this.$route.path === '/topic'){
+    }else if(this.$route.path === '/managementwrap/topic'){
       this.count = 3
     }
   },

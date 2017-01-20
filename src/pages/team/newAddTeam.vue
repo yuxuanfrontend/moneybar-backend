@@ -95,7 +95,7 @@ export default {
   },
   methods:{
     confirmBtn(){
-      this.$request.post(this.$getUrl('group/123456')).send({
+      this.$request.post(this.$getUrl('group/'+window.sessionStorage.memberId)).send({
         name:this.teamName,
         brief:this.teamBrief,
         attachment: {

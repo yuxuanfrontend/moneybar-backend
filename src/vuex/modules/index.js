@@ -1,7 +1,7 @@
-import warehouse from './warehouse'
 import notification from './notification'
+import identity from './identity'
 
 export default {
-  warehouse,
+  identity,
   notification
 }

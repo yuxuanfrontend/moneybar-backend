@@ -158,7 +158,7 @@ export default {
       this.$router.push('teamlist/'+team.id)
     },
     teamDelete(index){
-      this.$request.delete(this.$getUrl('group/123456')).query({
+      this.$request.delete(this.$getUrl('group/'+window.sessionStorage.memberId)).query({
         id:this.teams[index].id
       }).then((res)=>{
         this.teams.splice(index,1)
