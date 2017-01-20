@@ -74,7 +74,7 @@
           </div>
           <div class="mb-detail-main__head-right">
             <div>{{ dynamicDatas.createTime | dateFormat }}</div>
-            <div class="button is-info" @click="deleteDynamic">删帖</div>
+            <div class="button is-info" @click="deleteDynamic">{{dynamicDatas.statusVal | btnStatus}}</div>
           </div>
         </div>
 
@@ -133,12 +133,28 @@ export default {
   },
   methods:{
     deleteDynamic() {
-      this.$request.delete(this.$getUrl('dynamic/' + this.$route.params.id))
-        .then(res => {
+      if (this.dynamicDatas.statusVal === '3') {
+        this.$request.post(this.$getUrl('dynamic/recover/'+this.$route.params.id))
+        .query({
+          memberId: window.sessionStorage.memberId
+        })
+        .then((res)=>{
           if (res.body.responseCode === '000') {
-            this.$router.back()
+            this.dynamicDatas.statusVal = res.body.dto.statusVal
           }
         })
+      } else {
+        this.$request.post(this.$getUrl('dynamic/delete/' + this.$route.params.id))
+        .query({
+          memberId: window.sessionStorage.memberId
+        })
+        .then(res => {
+          if (res.body.responseCode === '000') {
+            this.dynamicDatas.statusVal = res.body.dto.statusVal
+          }
+        })
+
+      }
     },
 
     deleteComment(comment) {
@@ -155,6 +171,10 @@ export default {
   filters: {
     dateFormat(value) {
       return moment(value).format('YYYY-MM-DD HH:mm:ss')
+    },
+
+    btnStatus(value) {
+      return value === '3' ? '恢复' : '删帖'
     }
   }
 

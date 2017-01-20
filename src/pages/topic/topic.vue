@@ -96,10 +96,15 @@ export default {
       this.$router.push('addtopic')
     },
     shelveBtn(topic){   //话题下架
+      if (topic.statusVal === '1') {
+        return false
+      }
       if (topic.statusVal === '0') {
         this.$request.post(this.$getUrl('topic/soldOut/'+topic.id))
         .then((res)=>{
-          topic.statusVal === '1'
+          if (res.body.responseCode === '000') {
+            topic.statusVal == res.body.dto.statusVal
+          }
         },(err)=>{
           console.log(1111)
         })

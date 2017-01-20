@@ -57,7 +57,7 @@
             <td>
               <button class="button" v-if="dynamic.statusVal === '0'" @click="audit(dynamic)">审核</button>
               <button class="button" @click="readClick(index)">查看</button>
-              <button class="button" @click="deleteClick(index)">删帖</button>
+              <button class="button" @click="deleteClick(dynamic)" v-if="dynamic.statusVal !== '0'">{{dynamic.statusVal | btnStatus}}</button>
               <button class="button" v-show="false">恢复</button>
             </td>
           </tr>
@@ -138,19 +138,34 @@ export default {
     readClick(index){
       this.$router.push('dynamicDetail/'+this.dynamicDatas[index].id)
     },
-    deleteClick(index){
-      this.$request.post(this.$getUrl('dynamic/delete/'+this.dynamicDatas[index].id+'?memberId='+123456)).send().then((res)=>{
-        console.log(1)
-        this.dynamicDatas.splice(index,1)
-      },(err)=>{
-
-      })
+    deleteClick(dynamic){
+      if (dynamic.statusVal === '3') {
+        this.$request.post(this.$getUrl('dynamic/recover/'+dynamic.id))
+        .query({
+          memberId: window.sessionStorage.memberId
+        })
+        .then((res)=>{
+          if (res.body.responseCode === '000') {
+            dynamic.statusVal = res.body.dto.statusVal
+          }
+        })
+      } else {
+        this.$request.post(this.$getUrl('dynamic/delete/'+dynamic.id))
+        .query({
+          memberId: window.sessionStorage.memberId
+        })
+        .then((res)=>{
+          if (res.body.responseCode === '000') {
+            dynamic.statusVal = res.body.dto.statusVal
+          }
+        })
+      }
     },
 
     audit(dynamic) {
       this.$request.post(this.$getUrl('dynamic/check/' + dynamic.id))
         .query({
-          memberId: '2dfa235dbb1484813500502',
+          memberId: window.sessionStorage.memberId,
           flag: true
         })
         .then((res) => {
@@ -169,6 +184,10 @@ export default {
   filters: {
     dateFormat(value) {
       return moment(value).format('YYYY-MM-DD HH:mm:ss')
+    },
+
+    btnStatus(value) {
+      return value === '3' ? '恢复' : '删帖'
     }
   }
 }
