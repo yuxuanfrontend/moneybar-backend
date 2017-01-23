@@ -41,8 +41,8 @@ th,td{
             <td>{{ user.nickname }} </td>
             <td>{{ user.createTime | dateFormat }}</td>
             <td>{{ user.reportDynamicCount +  user.reportCommentCount  }}</td>
-            <td><a @click="reportDynamic">{{ user.reportDynamicCount }}</a></td>
-            <td><a @click="reportComment">{{ user.reportCommentCount }}</a></td>
+            <td><a @click="reportDynamic(index)">{{ user.reportDynamicCount }}</a></td>
+            <td><a @click="reportComment(index)">{{ user.reportCommentCount }}</a></td>
             <td><a class="button" @click="silent(user)">{{ (user.statusVal === '0')? '禁言':'恢复' }}</a></td>
           </tr>
         </tbody>
@@ -148,8 +148,8 @@ export default {
         console.log(res.body.responseMsg)
       })
     },
-    reportDynamic(){
-      this.$router.push('reportdynamic')
+    reportDynamic(index){
+      this.$router.push({path:'reportdynamic',query: { userDynamicId: this.users[index].id }})
     },
     reportComment(){
       this.$router.push('reportcomment')

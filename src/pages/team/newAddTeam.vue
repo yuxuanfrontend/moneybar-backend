@@ -1,7 +1,7 @@
 <template lang="html">
   <div class="my-container">
     <div class="add-team__title">
-      <h1 class="title is-3 has-text-left">新增小组 </h1>
+      <h1 class="title is-4 has-text-left">{{teamTitle}} </h1>
     </div>
     <div class="">
       <table class="table">
@@ -35,8 +35,8 @@
                     <option>With options</option>
                   </select>
                 </span>
-                <button class="button is-info">搜索</button>
-                <button class="button is-info">重置</button>
+                <!-- <button class="button is-info">搜索</button>
+                <button class="button is-info">重置</button> -->
               </p>
             </td>
           </tr>
@@ -69,6 +69,7 @@ export default {
   name:'newAddTeam',
   data () {
     return {
+      teamTitle:'新增小组',
       teamName:'',
       teamBrief:'',
       selectedManagerId:'',
@@ -82,17 +83,19 @@ export default {
   },
   mounted(){
 
-    console.log(this.$route.query.teamId);
-
-    this.$request.post(this.$getUrl('groups'))
+    // console.log(this.$route.query.teamId);
+    if (this.$route.query.teamId) {
+      console.log(111)
+      this.$request.post(this.$getUrl('groups'))
       .send({
         id: this.$route.query.teamId
       })
       .then(res => {
         if (res.body.responseCode === '000') {
+          this.teamTitle = '编辑小组'
           this.teamName = res.body.dto.results[0].name
           this.previewImg = res.body.dto.results[0].logo
-          this.selectedManagerId = res.body.dto.results[0].id
+          this.selectedManagerId = res.body.dto.results[0].managerId
           this.teamBrief = res.body.dto.results[0].brief
         }else{
           this.teamName=''
@@ -101,6 +104,8 @@ export default {
           this.teamBrief=''
         }
       })
+
+    }
 
     this.$request.post(this.$getUrl('members')).send({
       isManager:true
@@ -117,20 +122,38 @@ export default {
   },
   methods:{
     confirmBtn(){
-      this.$request.post(this.$getUrl('group/'+window.sessionStorage.memberId)).send({
-        name:this.teamName,
-        brief:this.teamBrief,
-        attachment: {
-          path: this.previewImg
-        },
-        manager:{
-          id: this.selectedManagerId
-        }
-      }).then((res)=>{
+      if (this.$route.query.teamId) {   //编辑
+        this.$request.post(this.$getUrl('group/'+window.sessionStorage.memberId)).send({
+          name:this.teamName,
+          brief:this.teamBrief,
+          attachment: {
+            path: this.previewImg
+          },
+          manager:{
+            id: this.selectedManagerId
+          },
+          id:this.$route.query.teamId
+        }).then((res)=>{
 
-      },(err)=>{
-        console.log(11111)
-      })
+        },(err)=>{
+          console.log(11111)
+        })
+      }else{        //添加
+        this.$request.post(this.$getUrl('group/'+window.sessionStorage.memberId)).send({
+          name:this.teamName,
+          brief:this.teamBrief,
+          attachment: {
+            path: this.previewImg
+          },
+          manager:{
+            id: this.selectedManagerId
+          }
+        }).then((res)=>{
+
+        },(err)=>{
+          console.log(11111)
+        })
+      }
       this.$router.push('team')
     },
 
@@ -150,7 +173,7 @@ export default {
       this.$request.post('http://192.168.228.236:8081/api/upload/files')
         .send(sendData)
         .then((res) => {
-          this.previewImg = res.body.dto.downloadPath
+          this.previewImg = res.body.t
         })
     }
   },

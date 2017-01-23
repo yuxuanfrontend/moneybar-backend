@@ -55,7 +55,24 @@ export default {
     }
   },
   mounted(){
-    // this.$request.post(this.$getUrl('dynamic/accusation/{id}'))
+    console.log(this.$route.query.userDynamicId)
+    this.$request.post(this.$getUrl('members'))
+    .send({
+      member : {
+        openId: this.$store.state.identity.openId
+      },
+      basePageResults : {
+        pageNo: this.queryPage,
+        pageSize: this.querySize
+      },
+      orderByCreateTimeDesc: true,
+      
+    })
+    .then(res=>{
+      console.log(res)
+    },err=>{
+
+    })
   }
 }
 </script>
