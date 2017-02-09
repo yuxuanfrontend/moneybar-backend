@@ -13,7 +13,7 @@ th,td{
       <input class="input mb-filter__input" type="text" placeholder="开始日期" ref="startDate" v-model="startDate">至
       <input class="input mb-filter__input" type="text" placeholder="结束日期" ref="endDate" v-model="endDate">
       <button class="button mb-filter__button" @click="searchUser">搜索</button>
-      <button class="button mb-filter__button">重置</button>
+      <button class="button mb-filter__button" @click="resetClick">重置</button>
       <div class="">
         <!-- 被举报数量：1000条 -->
       </div>
@@ -55,6 +55,7 @@ th,td{
         </tfoot>
       </table>
     </div>
+    <div class="noSearchTip" v-show="noSearchTip"> sorry,木有搜索到你想要的数据! </div>
   </div>
 </template>
 
@@ -81,7 +82,8 @@ export default {
       queryPage:1,
       querySize:10,
       totalPage:0,
-      pageshow:false
+      pageshow:false,
+      noSearchTip:false
     }
   },
   mounted(){
@@ -134,19 +136,41 @@ export default {
         teamData
       )
       .then((res)=>{
-        this.users = res.body.dto.results
-        this.totalPage = res.body.dto.count / this.querySize
+        if( this.userName=='' ){
+          this.$store.dispatch('fadeShow', {
+            status: 'warning',
+            content: '搜索关键字不能为空'
+          })
+        }else{
 
-        if(this.totalPage < 1){
-          this.pageshow =false
-        }else if(this.totalPage > 1){
-          this.pageshow =true
-          this.totalPage = Math.ceil(this.totalPage)
+          this.users = res.body.dto.results
+          this.totalPage = res.body.dto.count / this.querySize
+
+          if(res.body.dto.count == 0){
+            this.noSearchTip = true
+          }else {
+            this.noSearchTip = false
+          }
+
+          if(this.totalPage < 1){
+            this.pageshow =false
+          }else if(this.totalPage > 1){
+            this.pageshow =true
+            this.totalPage = Math.ceil(this.totalPage)
+          }
+
         }
 
       },(err)=>{
         console.log(res.body.responseMsg)
       })
+    },
+    resetClick(){
+      this.userName = ''
+      this.startDate = ''
+      this.endDate = ''
+      this.noSearchTip = false
+      this.userList()
     },
     reportDynamic(index){
       this.$router.push({path:'reportdynamic',query: { userDynamicId: this.users[index].id , userMemberId:this.users[index].memberId}})
@@ -160,7 +184,17 @@ export default {
         .then((res) => {
           if (res.body.responseCode === '000') {
             user.statusVal = '1'
+            this.$store.dispatch('fadeShow', {
+              status: 'warning',
+              content: '已禁言'
+            })
+          } else if(res.body.responseCode === '999'){
+            this.$store.dispatch('fadeShow', {
+              status: 'warning',
+              content: '没有权限禁言'
+            })
           }
+
         })
       } else {
         this.$request.post(this.$getUrl('members/cancelShutup/' + user.openId))
@@ -168,6 +202,10 @@ export default {
           if (res.body.responseCode === '000') {
             user.statusVal = '0'
           }
+          this.$store.dispatch('fadeShow', {
+            status: 'warning',
+            content: '已恢复'
+          })
         })
       }
     }

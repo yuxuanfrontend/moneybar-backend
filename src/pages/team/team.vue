@@ -154,23 +154,31 @@ export default {
       this.$request.post(this.$getUrl('groups')).send(
           teamData
         ).then((res)=>{
+          if(this.teamText == ''){
+            this.$store.dispatch('fadeShow', {
+              status: 'warning',
+              content: '搜索关键字不能为空'
+            })
+          }else{
 
-          this.teams = res.body.dto.results
-          this.teamCount = this.teams.length
-          this.totalPage =  res.body.dto.count / this.querySize
+            this.teams = res.body.dto.results
+            this.teamCount = this.teams.length
+            this.totalPage =  res.body.dto.count / this.querySize
 
-          if(res.body.dto.count == 0){
-            this.noSearchTip = true
-          }else {
-            this.noSearchTip = false
-          }
-          
-          if(this.totalPage < 1){
-            this.pageshow = false
-            this.totalPage = 0
-          }else if(this.totalPage >= 1){
-            this.pageshow = true
-            this.totalPage = Math.ceil(this.totalPage)
+            if(res.body.dto.count == 0){
+              this.noSearchTip = true
+            }else {
+              this.noSearchTip = false
+            }
+
+            if(this.totalPage < 1){
+              this.pageshow = false
+              this.totalPage = 0
+            }else if(this.totalPage >= 1){
+              this.pageshow = true
+              this.totalPage = Math.ceil(this.totalPage)
+            }
+
           }
         },(err)=>{
           console.log(2222)
@@ -182,7 +190,6 @@ export default {
       this.endDate = ''
       this.noSearchTip = false
       this.teamList()
-
     },
     teamListBtn(team){
       this.$router.push('teamlist/'+team.id)

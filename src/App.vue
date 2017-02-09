@@ -48,23 +48,24 @@ html,body{
         <router-view></router-view>
       </div>
 
-    </div>
+    </div>-->
 
-    <notification></notification> -->
+    <notification></notification>
 
   </div>
 </template>
 
 <script>
 
-// import notification from './components/notification'
+import notification from './components/notification'
 import managementhead from './components/managementHead'
 import managementwrap from './components/managementWrap'
 export default {
   name: 'app',
   components: {
     managementhead,
-    managementwrap
+    managementwrap,
+    notification
   },
 }
 </script>

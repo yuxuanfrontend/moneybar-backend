@@ -3,7 +3,7 @@
 
 <template lang="html">
   <div class="my-container">
-    <div class="mb-type">
+    <!-- <div class="mb-type">
       <span>动态类型: </span>
       <div class="control">
         <label class="radio">
@@ -19,15 +19,15 @@
           小组内动态
         </label>
       </div>
-    </div>
+    </div> -->
     <div class="mb-filter">
       <input class="input mb-filter__input" type="text" placeholder="动态标题" v-model="dynamicTitle">
       <input class="input mb-filter__input" type="text" placeholder="用户昵称" v-model="username">
       <input class="input mb-filter__input" type="text" placeholder="开始日期" ref="startDate" v-model="startDate" >至
       <input class="input mb-filter__input" type="text" placeholder="结束日期" ref="endDate" v-model="endDate">
 
-      <button class="button" @click="searchDynamic">搜索</button>
-      <button class="button" @click="resetClick">重置</button>
+      <button class="button mb-filter__button" @click="searchDynamic">搜索</button>
+      <button class="button mb-filter__button" @click="resetClick">重置</button>
       <div class="">
         数量：{{dynamicCount}}条
       </div>
@@ -156,22 +156,29 @@ export default {
           endCreateTime:   moment(this.endDate + ' 23:59:59').valueOf(),
           // statusVal:this.status
         }).then((res)=>{
-          this.dynamicDatas = res.body.dto.results
-          this.dynamicCount = this.dynamicDatas.length
-          this.totalPage =  res.body.dto.count / this.querySize
+          if(this.dynamicTitle == '' || this.username == ''){
+            this.$store.dispatch('fadeShow', {
+              status: 'warning',
+              content: '搜索关键字不能为空'
+            })
+          }else{
+            this.dynamicDatas = res.body.dto.results
+            this.dynamicCount = this.dynamicDatas.length
+            this.totalPage =  res.body.dto.count / this.querySize
 
-          if(res.body.dto.count === 0){
-            this.noSearchTip = true
-          }else {
-            this.noSearchTip = false
-          }
+            if(res.body.dto.count === 0){
+              this.noSearchTip = true
+            }else {
+              this.noSearchTip = false
+            }
 
-          if(this.totalPage < 1){
-            this.pageshow = false
-            this.totalPage = 0
-          }else if(this.totalPage >= 1){
-            this.pageshow = true
-            this.totalPage = Math.ceil(this.totalPage)
+            if(this.totalPage < 1){
+              this.pageshow = false
+              this.totalPage = 0
+            }else if(this.totalPage >= 1){
+              this.pageshow = true
+              this.totalPage = Math.ceil(this.totalPage)
+            }
           }
         },(err)=>{
           console.log(2222)

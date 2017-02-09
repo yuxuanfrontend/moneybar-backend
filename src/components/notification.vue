@@ -1,10 +1,13 @@
 <style lang="scss">
   .notification {
-    width: 60%;
+    width: 40%;
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 30%;
+    right:30%;
+    margin-left: -20%;
     z-index: 9999;
+    color:#ffffff;
+    text-align: center;
   }
 </style>
 

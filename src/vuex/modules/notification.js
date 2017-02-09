@@ -41,7 +41,7 @@ export default {
       if (!debounceHide) {
         debounceHide = _.debounce(() => {
           context.commit('hide')
-        }, 3000)
+        }, 1000)
       }
 
       debounceHide()
