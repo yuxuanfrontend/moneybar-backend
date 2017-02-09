@@ -10,11 +10,11 @@ export default {
   },
 
   mutations: {
-    show(state) {
+    showNotification(state) {
       state.isShow = true
     },
 
-    hide(state) {
+    hideNotification(state) {
       state.isShow = false
     },
 
@@ -33,14 +33,14 @@ export default {
       context.commit('setStatus', obj.status)
       context.commit('changeContent', obj.content)
 
-      context.commit('show')
+      context.commit('showNotification')
 
       // _.delay(() => {
       // }, 1000)
 
       if (!debounceHide) {
         debounceHide = _.debounce(() => {
-          context.commit('hide')
+          context.commit('hideNotification')
         }, 3000)
       }
 

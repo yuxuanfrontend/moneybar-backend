@@ -224,7 +224,8 @@ export default {
             dynamic.statusDescribe = res.body.dto.statusDescribe
           }
         })
-    }
+    },
+
   },
 
   components: {
