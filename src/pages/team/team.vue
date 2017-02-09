@@ -8,6 +8,14 @@ td a{
   color: #666;
   margin: 0 5px
 }
+.noSearchTip{
+  width: 100%;
+  padding: 25px 0;
+  text-align: center;
+  font-size: 16px;
+  color: #888;
+  font-family: "微软雅黑";
+}
 </style>
 
 <template lang="html">
@@ -19,9 +27,9 @@ td a{
       <!-- <date-picker field="myDate" placeholder="开始时间" v-model="dateBegin" format="yyyy/mm/dd"></date-picker>
       <date-picker field="myDate" placeholder="结束时间" v-model="dateEnd" format="yyyy/mm/dd"></date-picker> -->
       <button class="button mb-filter__button" @click="searchBtn">搜索</button>
-      <button class="button mb-filter__button">重置</button>
-      数量2个
-      <button class="button is-info mb-filter__button is-pulled-right" @click="newAddTeam">新增</button>
+      <button class="button mb-filter__button" @click="resetClick">重置</button>
+      数量{{ teamCount }}个
+      <button class="button is-info mb-filter__button" @click="newAddTeam">新增</button>
     </div>
     <div class="">
       <table class="table is-striped">
@@ -62,6 +70,7 @@ td a{
         </tfoot>
       </table>
     </div>
+    <div class="noSearchTip" v-show="noSearchTip"> sorry,木有搜索到你想要的数据! </div>
   </div>
 </template>
 
@@ -88,7 +97,9 @@ export default {
       querySize:10,
       totalPage:0,
       pageshow:false,
-      teams:[]
+      teamCount:'',
+      teams:[],
+      noSearchTip:false
     }
   },
   mounted(){
@@ -112,8 +123,11 @@ export default {
           },
           // statusVal:this.status
         }).then((res)=>{
+
           this.teams = res.body.dto.results
+          this.teamCount = res.body.dto.count
           this.totalPage =  res.body.dto.count / this.querySize
+
 
           if(this.totalPage < 1){
             this.pageshow = false
@@ -140,9 +154,17 @@ export default {
       this.$request.post(this.$getUrl('groups')).send(
           teamData
         ).then((res)=>{
+
           this.teams = res.body.dto.results
+          this.teamCount = this.teams.length
           this.totalPage =  res.body.dto.count / this.querySize
 
+          if(res.body.dto.count == 0){
+            this.noSearchTip = true
+          }else {
+            this.noSearchTip = false
+          }
+          
           if(this.totalPage < 1){
             this.pageshow = false
             this.totalPage = 0
@@ -153,6 +175,14 @@ export default {
         },(err)=>{
           console.log(2222)
         })
+    },
+    resetClick(){
+      this.teamText = ''
+      this.startDate = ''
+      this.endDate = ''
+      this.noSearchTip = false
+      this.teamList()
+
     },
     teamListBtn(team){
       this.$router.push('teamlist/'+team.id)

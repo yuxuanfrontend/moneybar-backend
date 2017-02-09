@@ -15,7 +15,7 @@ th,td{
       <button class="button mb-filter__button" @click="searchUser">搜索</button>
       <button class="button mb-filter__button">重置</button>
       <div class="">
-        被举报数量：1000条
+        <!-- 被举报数量：1000条 -->
       </div>
     </div>
     <div class="">
@@ -102,9 +102,9 @@ export default {
           pageNo: this.queryPage,
           pageSize: this.querySize,
         },
-        // statusVal:this.status
       })
       .then((res)=>{
+        console.log(res.body.dto.results)
         this.users = res.body.dto.results
         this.totalPage = res.body.dto.count / this.querySize
 
@@ -149,7 +149,7 @@ export default {
       })
     },
     reportDynamic(index){
-      this.$router.push({path:'reportdynamic',query: { userDynamicId: this.users[index].id }})
+      this.$router.push({path:'reportdynamic',query: { userDynamicId: this.users[index].id , userMemberId:this.users[index].memberId}})
     },
     reportComment(){
       this.$router.push('reportcomment')

@@ -21,15 +21,15 @@
       </div>
     </div>
     <div class="mb-filter">
-      <input class="input mb-filter__input" type="text" placeholder="动态标题">
-      <input class="input mb-filter__input" type="text" placeholder="用户昵称">
-      <input class="input mb-filter__input" type="text" placeholder="开始日期" ref="startDate" >至
-      <input class="input mb-filter__input" type="text" placeholder="结束日期" ref="endDate">
+      <input class="input mb-filter__input" type="text" placeholder="动态标题" v-model="dynamicTitle">
+      <input class="input mb-filter__input" type="text" placeholder="用户昵称" v-model="username">
+      <input class="input mb-filter__input" type="text" placeholder="开始日期" ref="startDate" v-model="startDate" >至
+      <input class="input mb-filter__input" type="text" placeholder="结束日期" ref="endDate" v-model="endDate">
 
-      <button class="button" >搜索</button>
-      <button class="button">重置</button>
+      <button class="button" @click="searchDynamic">搜索</button>
+      <button class="button" @click="resetClick">重置</button>
       <div class="">
-        数量：1000条
+        数量：{{dynamicCount}}条
       </div>
     </div>
 
@@ -71,6 +71,7 @@
         </tfoot>
       </table>
     </div>
+    <div class="noSearchTip" v-show="noSearchTip"> sorry,木有搜索到你想要的数据! </div>
   </div>
 </template>
 
@@ -86,11 +87,17 @@ export default {
 
   data() {
     return {
+      dynamicTitle:'',
+      username:'',
+      startDate:'',
+      endDate:'',
       queryPage:1,
       querySize:10,
       dynamicDatas: [ ],
       totalPage:0,
-      pageshow:false
+      pageshow:false,
+      dynamicCount:'',
+      noSearchTip:false
     }
   },
 
@@ -122,6 +129,7 @@ export default {
           // statusVal:this.status
         }).then((res)=>{
           this.dynamicDatas = res.body.dto.results
+          this.dynamicCount = res.body.dto.count
           this.totalPage =  res.body.dto.count / this.querySize
 
           if(this.totalPage < 1){
@@ -134,6 +142,48 @@ export default {
         },(err)=>{
           console.log(2222)
         })
+    },
+    searchDynamic(){
+      this.$request.post(this.$getUrl('dynamics')).send(
+        {
+          basePageResults: {
+            pageNo: this.queryPage,
+            pageSize: this.querySize,
+          },
+          title: this.dynamicTitle,
+          nickname:this.username,
+          beginCreateTime:   moment(this.startDate + ' 00:00:00').valueOf(),
+          endCreateTime:   moment(this.endDate + ' 23:59:59').valueOf(),
+          // statusVal:this.status
+        }).then((res)=>{
+          this.dynamicDatas = res.body.dto.results
+          this.dynamicCount = this.dynamicDatas.length
+          this.totalPage =  res.body.dto.count / this.querySize
+
+          if(res.body.dto.count === 0){
+            this.noSearchTip = true
+          }else {
+            this.noSearchTip = false
+          }
+
+          if(this.totalPage < 1){
+            this.pageshow = false
+            this.totalPage = 0
+          }else if(this.totalPage >= 1){
+            this.pageshow = true
+            this.totalPage = Math.ceil(this.totalPage)
+          }
+        },(err)=>{
+          console.log(2222)
+        })
+    },
+    resetClick(){
+      this.dynamicTitle=''
+      this.username=''
+      this.startDate=''
+      this.endDate=''
+      this.dynamicList()
+      this.noSearchTip = false
     },
     readClick(index){
       this.$router.push('dynamicDetail/'+this.dynamicDatas[index].id)

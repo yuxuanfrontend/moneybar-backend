@@ -29,12 +29,12 @@
                     <option v-for="manager in teamManagers" :value="manager.memberId">{{ manager.name }}</option>
                   </select>
                 </span>
-                <span class="select">
+                <!-- <span class="select">
                   <select>
                     <option>Select dropdown</option>
                     <option>With options</option>
                   </select>
-                </span>
+                </span> -->
                 <!-- <button class="button is-info">搜索</button>
                 <button class="button is-info">重置</button> -->
               </p>
@@ -76,8 +76,6 @@ export default {
       teamManager:'',
       teamManagers:[],
       selectedManagerId: '',
-
-      // files: [],
       previewImg: ''
     }
   },
@@ -85,7 +83,6 @@ export default {
 
     // console.log(this.$route.query.teamId);
     if (this.$route.query.teamId) {
-      console.log(111)
       this.$request.post(this.$getUrl('groups'))
       .send({
         id: this.$route.query.teamId

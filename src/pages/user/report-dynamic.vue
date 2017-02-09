@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="my-container">
-    <div class="mb-title">被举报动态 被举报数量：1条</div>
+    <div class="mb-title">被举报动态 被举报数量：{{ reportdynamicNum }}条</div>
     <div class="">
       <table class="table is-striped">
         <thead>
@@ -19,16 +19,16 @@
         <tbody>
           <tr v-for="(reportdynamic,index) in reportdynamics">
             <td class="title-td" >
-              <a v-on:click="teamList(team)">{{ reportdynamic.title }}</a>
+              <a v-on:click="dynamicDetails(index)">{{ reportdynamic.title }}</a>
             </td>
             <td>{{ reportdynamic.id }} </td>
-            <td>{{ reportdynamic.userName }} </td>
-            <td>{{ reportdynamic.publishDate }}</td>
-            <td>{{ reportdynamic.readNum }}</td>
-            <td>{{ reportdynamic.commentNum }}</td>
-            <td>{{ (reportdynamic.status == 1)? '被举报':'未举报' }}</td>
+            <td>{{ reportdynamic.nickname }} </td>
+            <td>{{ reportdynamic.createTime | dateFormat }}</td>
+            <td>{{ reportdynamic.readCount }}</td>
+            <td>{{ reportdynamic.commentCount }}</td>
+            <td>{{ (reportdynamic.statusVal == 1)? '被举报':'未举报' }}</td>
             <td>{{ reportdynamic.reason }}</td>
-            <td><a class="button">禁言恢复</a></td>
+            <td><a class="button" @click="cancelReport(index)">取消举报</a><a class="button">删除恢复</a></td>
           </tr>
         </tbody>
         <tfoot>
@@ -43,36 +43,56 @@
 </template>
 
 <script>
+
+import moment from 'moment'
 export default {
   data () {
     return {
-      reportdynamics:[
-        {title:'学选',id:1254,userName:'大boss',publishDate:'2017-12-12',readNum:12,commentNum:12,status:'1',reason:'政治因素'},
-        {title:'学选',id:1254,userName:'大boss',publishDate:'2017-12-12',readNum:12,commentNum:12,status:'1',reason:'政治因素'},
-        {title:'学选',id:1254,userName:'大boss',publishDate:'2017-12-12',readNum:12,commentNum:12,status:'1',reason:'政治因素'},
-        {title:'学选',id:1254,userName:'大boss',publishDate:'2017-12-12',readNum:12,commentNum:12,status:'1',reason:'政治因素'}
-      ]
+      reportdynamics:[ ],
+      reportdynamicNum:'',
+      queryPage:1,
+      querySize:10
     }
   },
   mounted(){
-    console.log(this.$route.query.userDynamicId)
-    this.$request.post(this.$getUrl('members'))
+    console.log(this.$route.query.userMemberId)
+    this.$request.post(this.$getUrl('members/'+this.$route.query.userMemberId+'/accusations'))
     .send({
-      member : {
-        openId: this.$store.state.identity.openId
-      },
+      // member : {
+      //   openId: this.$store.state.identity.openId
+      // },
       basePageResults : {
         pageNo: this.queryPage,
         pageSize: this.querySize
       },
       orderByCreateTimeDesc: true,
-      
+
     })
     .then(res=>{
-      console.log(res)
+      console.log(res.body.dto)
+      this.reportdynamics = res.body.dto
+      this.reportdynamicNum = res.body.dto.length
     },err=>{
 
     })
+  },
+  methods:{
+    dynamicDetails(index){
+      this.$router.push('dynamicDetail/'+this.reportdynamics[index].id)
+    },
+    cancelReport(index){
+      this.$request.post(this.$getUrl('/dynamic/accusation/cancel/'+this.reportdynamics[index].id))
+      .then(res=>{
+        this.reportdynamics.splice(index,1)
+      },err=>{
+
+      })
+    }
+  },
+  filters: {
+    dateFormat(value) {
+      return moment(value).format('YYYY-MM-DD HH:mm:ss')
+    }
   }
 }
 </script>

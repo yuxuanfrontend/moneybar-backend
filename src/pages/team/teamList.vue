@@ -73,7 +73,6 @@ export default {
         id:this.$route.params.id
       }
     }).then((res)=>{
-      console.log(res)
       this.teams = res.body.dto.results
     },(err)=>{
 
