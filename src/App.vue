@@ -48,9 +48,11 @@ html,body{
         <router-view></router-view>
       </div>
 
-    </div>-->
+
+    </div> -->
 
     <notification></notification>
+    <confirm></confirm>
 
   </div>
 </template>
@@ -58,6 +60,7 @@ html,body{
 <script>
 
 import notification from './components/notification'
+import confirm from './components/confirm'
 import managementhead from './components/managementHead'
 import managementwrap from './components/managementWrap'
 export default {
@@ -65,7 +68,8 @@ export default {
   components: {
     managementhead,
     managementwrap,
-    notification
+    notification,
+    confirm
   },
 }
 </script>
