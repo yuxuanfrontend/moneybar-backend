@@ -54,7 +54,7 @@ td a{
               <img :src="team.logo" alt="" class="icon">
             </td>
             <td>{{ team.memberName }}</td>
-            <td>{{ team.createTime | dateFormat }}</td>
+            <td>{{ team.createTime | my-date }}</td>
             <!-- <td>{{ team.teamNum }}</td> -->
             <td>{{ team.dynamicCount }}</td>
             <!-- <td>{{ team.topicNum + ' / ' + team.followNum }}</td> -->
@@ -78,10 +78,8 @@ td a{
 import Flatpickr from 'flatpickr'
 import datePickerZh from 'flatpickr/dist/l10n/zh'
 import Img from '../../assets/logo.png'
-
-import pagination from '../../components/pagination'
-
 import moment from 'moment'
+import pagination from '../../components/pagination'
 
 Flatpickr.localize(datePickerZh.zh)
 export default {
@@ -195,15 +193,40 @@ export default {
       this.$router.push('teamlist/'+team.id)
     },
     editorTeam(index){
-        this.$router.push({path:'newAddTeam',query: { teamId: this.teams[index].id }})
+      this.$store.dispatch('openConfirm', {
+        buttons: [
+          {
+            text: '确认',
+            callback: () => {
+              this.$router.push({path:'newAddTeam',query: { teamId: this.teams[index].id }})
+            }
+          },
+          {
+            text: '取消',
+          }
+        ],
+        content: '是否要编辑这个小组？'
+      })
     },
     teamDelete(index){
       this.$request.delete(this.$getUrl('group/'+window.sessionStorage.memberId)).query({
         id:this.teams[index].id
       }).then((res)=>{
-        this.teams.splice(index,1)
+        this.$store.dispatch('openConfirm', {
+          buttons: [
+            {
+              text: '确认',
+              callback: () => {
+                this.teams.splice(index,1)
+              }
+            },
+            {
+              text: '取消',
+            }
+          ],
+          content: '是否要删除这条动态？'
+        })
       },(err)=>{
-
       })
 
     },
@@ -212,9 +235,6 @@ export default {
     }
   },
   filters: {
-    dateFormat(value) {
-      return moment(value).format('YYYY-MM-DD HH:mm:ss')
-    }
   }
 }
 </script>

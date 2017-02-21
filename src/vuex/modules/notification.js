@@ -35,9 +35,6 @@ export default {
 
       context.commit('showNotification')
 
-      // _.delay(() => {
-      // }, 1000)
-
       if (!debounceHide) {
         debounceHide = _.debounce(() => {
           context.commit('hideNotification')

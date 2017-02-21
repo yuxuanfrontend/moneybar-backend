@@ -20,10 +20,10 @@
             <td class="title-td" >
               <a v-on:click="teamList(team)">{{ reportdynamic.title }}</a>
             </td>
-            <td>{{ reportdynamic.publishDate }}</td>
+            <td>{{ reportdynamic.publishDate | my-date }}</td>
             <td>{{ reportdynamic.id }} </td>
             <td>{{ reportdynamic.userName }} </td>
-            <td>{{ reportdynamic.publishDate }}</td>
+            <td>{{ reportdynamic.publishDate | my-date }}</td>
             <td>{{ (reportdynamic.status == 1)? '被举报':'未举报' }}</td>
             <td>{{ reportdynamic.reason }}</td>
             <td><a class="button">查看</a><a class="button">取消举报</a></td>
@@ -44,15 +44,11 @@
 export default {
   data () {
     return {
-      reportdynamics:[
-        {title:'学选',id:1254,userName:'大boss',publishDate:'2017-12-12',readNum:12,commentNum:12,status:'1',reason:'政治因素'},
-        {title:'学选',id:1254,userName:'大boss',publishDate:'2017-12-12',readNum:12,commentNum:12,status:'1',reason:'政治因素'},
-        {title:'学选',id:1254,userName:'大boss',publishDate:'2017-12-12',readNum:12,commentNum:12,status:'1',reason:'政治因素'},
-        {title:'学选',id:1254,userName:'大boss',publishDate:'2017-12-12',readNum:12,commentNum:12,status:'1',reason:'政治因素'}
-      ]
+      reportdynamics:[]
     }
   },
   mounted(){
+    console.log(this.$route.query.userMemberId)
     // this.$request.post(this.$getUrl('dynamic/accusation/{id}'))
   }
 }

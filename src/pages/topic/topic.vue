@@ -5,7 +5,7 @@
   <div class="my-container">
     <div class="mb-title">
       <div>
-        话题管理 话题数量：2条
+        话题管理 话题数量：{{topicNmb}}条
       </div>
       <div>
         <a class="button" @click="addTopic">新建话题</a>
@@ -27,7 +27,7 @@
           <tr v-for="(topic,index) in topics">
             <td class="title-td" > {{ topic.title}} </td>
             <td>{{ topic.manager }}</td>
-            <td>{{ topic.createTime | dateFormat }}</td>
+            <td>{{ topic.createTime | my-date }}</td>
             <td>{{ topic.dynamicCount }}</td>
             <!-- <td>{{ topic.personNum }}</td> -->
             <td><a class="button" @click="shelveBtn(topic)">{{topic.statusVal === '0' ? '下架' : '已下架'}}</a></td>
@@ -47,7 +47,6 @@
 
 <script>
 import pagination from '../../components/pagination'
-import moment from 'moment'
 export default {
   components: {
     pagination
@@ -58,7 +57,8 @@ export default {
       queryPage:1,
       querySize:10,
       totalPage:0,
-      pageshow:false
+      pageshow:false,
+      topicNmb:0
     }
   },
   computed:{
@@ -80,6 +80,7 @@ export default {
           }
         }).then((res)=>{
           this.topics = res.body.dto.results
+          this.topicNmb = res.body.dto.count
           this.totalPage = res.body.dto.count / this.querySize
 
           if(this.totalPage < 1){
@@ -112,9 +113,6 @@ export default {
     }
   },
   filters: {
-    dateFormat(value) {
-      return moment(value).format('YYYY-MM-DD HH:mm:ss')
-    }
   }
 }
 </script>

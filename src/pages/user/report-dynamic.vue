@@ -23,7 +23,7 @@
             </td>
             <td>{{ reportdynamic.id }} </td>
             <td>{{ reportdynamic.nickname }} </td>
-            <td>{{ reportdynamic.createTime | dateFormat }}</td>
+            <td>{{ reportdynamic.createTime | my-date }}</td>
             <td>{{ reportdynamic.readCount }}</td>
             <td>{{ reportdynamic.commentCount }}</td>
             <td>{{ (reportdynamic.statusVal == 1)? '被举报':'未举报' }}</td>
@@ -44,7 +44,6 @@
 
 <script>
 
-import moment from 'moment'
 export default {
   data () {
     return {
@@ -58,9 +57,6 @@ export default {
     console.log(this.$route.query.userMemberId)
     this.$request.post(this.$getUrl('members/'+this.$route.query.userMemberId+'/accusations'))
     .send({
-      // member : {
-      //   openId: this.$store.state.identity.openId
-      // },
       basePageResults : {
         pageNo: this.queryPage,
         pageSize: this.querySize
@@ -90,9 +86,6 @@ export default {
     }
   },
   filters: {
-    dateFormat(value) {
-      return moment(value).format('YYYY-MM-DD HH:mm:ss')
-    }
   }
 }
 </script>

@@ -103,7 +103,6 @@
 </template>
 
 <script>
-import moment from 'moment'
 export default {
   name: 'dynamic-detail',
   data () {
@@ -169,10 +168,6 @@ export default {
     }
   },
   filters: {
-    dateFormat(value) {
-      return moment(value).format('YYYY-MM-DD HH:mm:ss')
-    },
-
     btnStatus(value) {
       return value === '3' ? '恢复' : '删帖'
     }

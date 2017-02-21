@@ -50,7 +50,7 @@
             <td class="title-td">{{dynamic.title}}</td>
             <!-- <td>{{dynamic.dealId}}</td> -->
             <td>{{dynamic.nickname}}</td>
-            <td>{{dynamic.createTime | dateFormat }}</td>
+            <td>{{dynamic.createTime | my-date }}</td>
             <td>{{(dynamic.groupName === null) ? '-' : dynamic.groupName }}</td>
             <td>{{dynamic.readCount}}</td>
             <td>{{dynamic.statusDescribe}}</td>
@@ -80,8 +80,10 @@ import Flatpickr from 'flatpickr'
 import datePickerZh from 'flatpickr/dist/l10n/zh'
 import Img from '../../assets/logo.png'
 
-import pagination from '../../components/pagination'
 import moment from 'moment'
+
+import pagination from '../../components/pagination'
+
 export default {
   name: 'dynamic',
 
@@ -240,10 +242,6 @@ export default {
   },
 
   filters: {
-    dateFormat(value) {
-      return moment(value).format('YYYY-MM-DD HH:mm:ss')
-    },
-
     btnStatus(value) {
       return value === '3' ? '恢复' : '删帖'
     }

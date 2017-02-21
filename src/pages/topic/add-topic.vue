@@ -7,7 +7,7 @@
        </div>
        <div class="topic-box__foot">
          <a class="button" @click="confirmBtn">确定</a>
-         <a class="button" >取消</a>
+         <a class="button" @click="cancel">取消</a>
        </div>
     </div>
 
@@ -27,10 +27,34 @@ export default {
         title:this.topicTitle
       }).then((res)=>{
         console.log(res)
-        this.$router.push('topic')
+        if(this.topicTitle == ''){
+          this.$store.dispatch('fadeShow', {
+            status: 'primary',
+            content: '话题名字不能为空'
+          })
+        }else{
+          this.$store.dispatch('openConfirm', {
+            buttons: [
+              {
+                text: '确认',
+                callback: () => {
+                  console.log(111);
+                  this.$router.push('topic')
+                }
+              },
+              {
+                text: '取消',
+              }
+            ],
+            content: '是否创建话题'
+          })
+        }
       },(err)=>{
         console.log(1111)
       })
+    },
+    cancel(){
+
     }
   }
 }

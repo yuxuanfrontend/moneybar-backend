@@ -53,7 +53,7 @@
           <tr>
             <td colspan="2">
               <a class="button is-info" @click="confirmBtn">确定</a>
-              <a class="button is-info">取消</a>
+              <a class="button is-info" @click="cancel">取消</a>
             </td>
           </tr>
         </tfoot>
@@ -81,7 +81,7 @@ export default {
   },
   mounted(){
 
-    // console.log(this.$route.query.teamId);
+    console.log(this.$route.query.teamId);
     if (this.$route.query.teamId) {
       this.$request.post(this.$getUrl('groups'))
       .send({
@@ -131,7 +131,21 @@ export default {
           },
           id:this.$route.query.teamId
         }).then((res)=>{
-
+          this.$store.dispatch('openConfirm', {
+            buttons: [
+              {
+                text: '确认',
+                callback: () => {
+                  console.log(111);
+                  this.$router.push('team')
+                }
+              },
+              {
+                text: '取消',
+              }
+            ],
+            content: '编辑成功成功！'
+          })
         },(err)=>{
           console.log(11111)
         })
@@ -146,11 +160,34 @@ export default {
             id: this.selectedManagerId
           }
         }).then((res)=>{
-
+          if(this.teamName ==''|| this.teamBrief == ''){
+            this.$store.dispatch('fadeShow', {
+              status: 'warning',
+              content: '小组名或简介不能为空'
+            })
+          }else{
+            this.$store.dispatch('openConfirm', {
+              buttons: [
+                {
+                  text: '确认',
+                  callback: () => {
+                    console.log(111);
+                    this.$router.push('team')
+                  }
+                },
+                {
+                  text: '取消',
+                }
+              ],
+              content: '是否新添加小组！'
+            })
+          }
         },(err)=>{
           console.log(11111)
         })
       }
+    },
+    cancel(){
       this.$router.push('team')
     },
 
@@ -165,12 +202,12 @@ export default {
       //   this.previewImg = fileReader.result
       // }
 
-      sendData.append('file', choosedFile)
+      sendData.append('files', choosedFile)
 
-      this.$request.post('http://192.168.228.236:8081/api/upload/files')
+      this.$request.post('https://wjx.yinli99.com/file-inrpc/file/uploads')
         .send(sendData)
         .then((res) => {
-          this.previewImg = res.body.t
+          this.previewImg = res.body.dto[0].downloadPath
         })
     }
   },

@@ -23,7 +23,7 @@ export default {
   },
   methods : {
     loginbtn (){
-      this.$request.post('http://192.168.228.236:8083/mb-inrpc/mb/login')
+      this.$request.post('https://wjs.yinli99.com/mb-inrpc/mb/login')
         .send({
           username: this.username,
           password: {

@@ -24,7 +24,7 @@ Vue.use(VueSuperagent)
 
 
 import moment from 'moment'
-Vue.filter('my-date', function(val) {
+Vue.filter('my-date', function(val) {  //时间过滤器
   return moment(val).format('YYYY-MM-DD HH:mm')
 })
 

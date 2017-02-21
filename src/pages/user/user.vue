@@ -39,7 +39,7 @@ th,td{
             </td>
             <td>{{ user.name }} </td>
             <td>{{ user.nickname }} </td>
-            <td>{{ user.createTime | dateFormat }}</td>
+            <td>{{ user.createTime | my-date }}</td>
             <td>{{ user.reportDynamicCount +  user.reportCommentCount  }}</td>
             <td><a @click="reportDynamic(index)">{{ user.reportDynamicCount }}</a></td>
             <td><a @click="reportComment(index)">{{ user.reportCommentCount }}</a></td>
@@ -63,10 +63,9 @@ th,td{
 import Flatpickr from 'flatpickr'
 import datePickerZh from 'flatpickr/dist/l10n/zh'
 import Img from '../../assets/logo.png'
+import moment from 'moment'
 
 import pagination from '../../components/pagination'
-
-import moment from 'moment'
 
 Flatpickr.localize(datePickerZh.zh)
 export default {
@@ -175,8 +174,8 @@ export default {
     reportDynamic(index){
       this.$router.push({path:'reportdynamic',query: { userDynamicId: this.users[index].id , userMemberId:this.users[index].memberId}})
     },
-    reportComment(){
-      this.$router.push('reportcomment')
+    reportComment(index){
+      this.$router.push({path:'reportcomment',query: { userDynamicId: this.users[index].id , userMemberId:this.users[index].memberId}})
     },
     silent(user) {
       if (user.statusVal === '0') {
@@ -211,9 +210,6 @@ export default {
     }
   },
   filters: {
-    dateFormat(value) {
-      return moment(value).format('YYYY-MM-DD HH:mm:ss')
-    }
   }
 }
 </script>

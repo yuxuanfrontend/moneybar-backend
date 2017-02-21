@@ -32,7 +32,7 @@
             <tr v-for="(team,index) in teams">
               <td>{{ team.title }}</td>
               <td>{{ team.nickname }}</td>
-              <td>{{ team.createTime | dateFormat }}</td>
+              <td>{{ team.createTime | my-date }}</td>
               <td>{{ team.readCount }}</td>
               <td>{{ team.statusDescribe }}</td>
               <td><a class="button">编辑</a><a class="button" @click="teamDynamicDelete(index)">删除</a></td>
@@ -48,8 +48,6 @@
 import Flatpickr from 'flatpickr'
 import datePickerZh from 'flatpickr/dist/l10n/zh'
 import Img from '../../assets/logo.png'
-
-import moment from 'moment'
 
 Flatpickr.localize(datePickerZh.zh)
 export default {
@@ -93,12 +91,6 @@ export default {
  //    // alert(1000)
  //    next()
  // },
- filters: {
-   dateFormat(value) {
-     return moment(value).format('YYYY-MM-DD HH:mm:ss')
-   }
- }
-
 }
 </script>
 
